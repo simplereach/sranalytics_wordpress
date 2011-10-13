@@ -8,9 +8,9 @@
  Author URI: https://www.simplereach.com
  */
 
-define('SRanalytics_PLUGIN_VERSION', '0.0.1');
-define('SRanalytics_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('SRanalytics_PLUGIN_SUPPORT_EMAIL', 'support@simplereach.com');
+define('SRANALYTICS_PLUGIN_VERSION', '0.0.1');
+define('SRANALYTICS_PLUGIN_URL', PLugin_dir_url(__FILE__));
+define('SRANALYTICS_PLUGIN_SUPPORT_EMAIL', 'support@simplereach.com');
 
 /**
  * Insert analytics code onto the post page
@@ -21,8 +21,8 @@ define('SRanalytics_PLUGIN_SUPPORT_EMAIL', 'support@simplereach.com');
  */
 function sranalytics_insert_js($content)
 {
-    $sranalytics_userid = get_option('sranalytics_pid');
-    if (empty($srtracerk_pid)) {
+    $sranalytics_pid = get_option('sranalytics_pid');
+    if (empty($sranalytics_pid)) {
         return $content;
     }
 
@@ -41,14 +41,112 @@ function sranalytics_insert_js($content)
 
     $SRANALYTICS_PLUGIN_VERSION = SRANALYTICS_PLUGIN_VERSION;
 
+    // Prep the variables
+    $title = sranalytics_get_post_title($post);
+    $authors = sranalytics_get_post_authors($post);
+    $tags = sranalytics_get_post_tags($post);
+    $channels = sranalytics_get_post_channels($post);
+    $published_date = $post->post_date_gmt;
+    $canonical_url = urlencode(get_permalink($post->ID));
+
 // Get the JS ready to go
 $rv = <<< SRANALYTICS_SCRIPT_TAG
 <!-- SimpleReach Analytics Plugin Version: {$SRANALYTICS_PLUGIN_VERSION} -->
-<script type='text/javascript' id='simplereach-analytics-tag'></script>
+<script type='text/javascript' id='simplereach-analytics-tag'>
+/* <![CDATA[ */
+    __reach_config = {
+      pid: '${sranalytics_pid}',
+      title: '{$title}',
+      url: '${canonical_url}',
+      date: '${published_date}',
+      authors: {$authors},
+      channels: {$channels},
+      tags: {$tags}
+    };
+    (function(){
+      var s = document.createElement('script');
+      s.async = true;
+      s.type = 'text/javascript';
+      s.src = document.location.protocol + '//simple-cdn.s3.amazonaws.com/js/reach-devel.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(s);
+    })();
+/* ]]> */
+</script>
 SRANALYTICS_SCRIPT_TAG;
 
     return $content . $rv;
 }
+
+/**
+ * Return the title for the post
+ *
+ * @author Eric Lubow <elubow@simplereach.com>
+ * @param Object $post Post object being shown on the page
+ * @return String Title of the post with slashes escaped
+ */
+function sranalytics_get_post_title($post)
+{
+    $title = $post->post_title;
+    return addslashes($title);
+}
+
+
+/**
+ * Get the post authors and return them in stringified array form
+ * NOTE: Wordpress can currently only have on author per post.
+ *
+ * @author Eric Lubow <elubow@simplereach.com>
+ * @param Object $post Wordpress Post
+ * @return String $array A string representation of the array of authors
+ */
+function sranalytics_get_post_authors($post)
+{
+    $author = "'".addslashes(get_the_author())."'";
+    return "[{$author}]";
+}
+
+
+
+/**
+ * Get the post categories and return them in stringified array form
+ *
+ * @author Eric Lubow <elubow@simplereach.com>
+ * @param Object $post Wordpress Post
+ * @return String $array A string representation of the array of categories
+ */
+function sranalytics_get_post_channels($post)
+{
+    $post_categories = wp_get_post_categories($post->ID);
+    $myCats = array();
+    foreach ($post_categories as $c) {
+        $cat = get_category($c);
+        $myCats[] = "'".addslashes($cat->slug)."'";
+    }
+    $cats = join(',', $myCats);
+
+    return "[{$cats}]";
+}
+
+
+/**
+ * Return the tags for the post
+ *
+ * @author Eric Lubow <elubow@simplereach.com>
+ * @param Object $post Post object being shown on the page
+ * @return String Tags of the post with slashes escaped
+ */
+function sranalytics_get_post_tags($post)
+{
+    $wptags = wp_get_post_tags($post->ID);
+    $myTags = array();
+    foreach ($wptags as $tag) {
+        $myTags[] = (is_object($tag)) ? "'".addslashes($tag->name)."'" : "'".addslashes($tag)."'";
+    }
+	$tags = join(',', $myTags);
+    return "[{$tags}]";
+}
+
+
 
 /**
  * Add the SimpleReach admin section
