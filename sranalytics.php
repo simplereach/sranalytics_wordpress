@@ -47,7 +47,7 @@ function sranalytics_insert_js($content)
     $tags = sranalytics_get_post_tags($post);
     $channels = sranalytics_get_post_channels($post);
     $published_date = $post->post_date_gmt;
-    $canonical_url = urlencode(get_permalink($post->ID));
+    $canonical_url = addslashes(get_permalink($post->ID));
 
 // Get the JS ready to go
 $rv = <<< SRANALYTICS_SCRIPT_TAG
