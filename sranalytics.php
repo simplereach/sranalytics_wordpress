@@ -22,12 +22,19 @@ define('SRANALYTICS_PLUGIN_SUPPORT_EMAIL', 'support@simplereach.com');
 function sranalytics_insert_js($content)
 {
     $sranalytics_pid = get_option('sranalytics_pid');
-    if (empty($sranalytics_pid)) {
+
+    // Try and check the validity of the PID
+    if (empty($sranalytics_pid) || strlen($sranalytics_pid) != 24) {
         return $content;
     }
 
     // Return the content on anything other than post pages
     if (!is_single() && !is_page()) {
+        return $content;
+    }
+
+    // Skip pages and only show on posts
+    if (is_page()) {
         return $content;
     }
 
