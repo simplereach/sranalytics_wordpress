@@ -60,7 +60,6 @@ function sranalytics_insert_js($content)
 $rv = <<< SRANALYTICS_SCRIPT_TAG
 <!-- SimpleReach Analytics Plugin Version: {$SRANALYTICS_PLUGIN_VERSION} -->
 <script type='text/javascript' id='simplereach-analytics-tag'>
-/* <![CDATA[ */
     __reach_config = {
       pid: '${sranalytics_pid}',
       title: '{$title}',
@@ -77,7 +76,6 @@ $rv = <<< SRANALYTICS_SCRIPT_TAG
       s.src = document.location.protocol + '//simple-cdn.s3.amazonaws.com/js/reach-devel.js';
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(s);
     })();
-/* ]]> */
 </script>
 SRANALYTICS_SCRIPT_TAG;
 
