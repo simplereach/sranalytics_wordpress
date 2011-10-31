@@ -29,16 +29,16 @@ function sranalytics_insert_js($content)
     }
 
     // Return the content on anything other than post pages
-    if (!is_single() && !is_page()) {
+    if (!is_singlular()) {
         return $content;
     }
 
-    // Skip pages and only show on posts
-    if (is_page()) {
+    // Skip attachments and only show on posts
+    if (is_attachment()) {
         return $content;
     }
 
-    GLOBAL $post;
+    global $post;
     $post_id = $post_id->ID;
 
     // If the post isn't published yet, we don't need a slide
