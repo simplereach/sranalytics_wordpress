@@ -29,7 +29,7 @@ function sranalytics_insert_js($content)
     }
 
     // Return the content on anything other than post pages
-    if (!is_single()) {
+    if (!is_singular()) {
         return $content;
     }
 
