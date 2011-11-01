@@ -29,7 +29,7 @@ function sranalytics_insert_js($content)
     }
 
     // Return the content on anything other than post pages
-    if (!is_singlular()) {
+    if (!is_single()) {
         return $content;
     }
 
@@ -39,7 +39,7 @@ function sranalytics_insert_js($content)
     }
 
     global $post;
-    $post_id = $post_id->ID;
+    $post_id = $post->ID;
 
     // If the post isn't published yet, we don't need a slide
     if ($post->post_status != 'publish') {
