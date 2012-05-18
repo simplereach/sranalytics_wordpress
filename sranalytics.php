@@ -73,7 +73,7 @@ $rv = <<< SRANALYTICS_SCRIPT_TAG
       var s = document.createElement('script');
       s.async = true;
       s.type = 'text/javascript';
-      s.src = document.location.protocol + '//simple-cdn.s3.amazonaws.com/js/reach-devel.js';
+      s.src = document.location.protocol + '//simple-cdn.s3.amazonaws.com/js/reach.js';
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(s);
     })();
 </script>
