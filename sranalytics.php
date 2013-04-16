@@ -3,12 +3,12 @@
  Plugin Name: SimpleReach Analytics
  Plugin URI: https://www.simplereach.com
  Description: After installation, you must click '<a href='options-general.php?page=SimpleReach-Analytics'>Settings &rarr; SimpleReach Analytics</a>' to turn on the Analytics.
- Version: 0.0.1
+ Version: 0.0.2
  Author: SimpleReach
  Author URI: https://www.simplereach.com
  */
 
-define('SRANALYTICS_PLUGIN_VERSION', '0.0.1');
+define('SRANALYTICS_PLUGIN_VERSION', '0.0.2');
 define('SRANALYTICS_PLUGIN_URL', PLugin_dir_url(__FILE__));
 define('SRANALYTICS_PLUGIN_SUPPORT_EMAIL', 'support@simplereach.com');
 
@@ -144,10 +144,19 @@ function sranalytics_get_post_tags($post)
 {
     $wptags = wp_get_post_tags($post->ID);
     $myTags = array();
+
+	// Check to see if we are using the global tag
+	$sranalytics_show_global_tag = get_option('sranalytics_show_global_tag');
+	$sranalytics_global_tag = get_option('sranalytics_global_tag');
+	if ($sranalytics_show_global_tag) {
+		array_push($myTags, "'$sranalytics_global_tag'");
+	}
+
     foreach ($wptags as $tag) {
         $myTags[] = (is_object($tag)) ? "'".addslashes($tag->name)."'" : "'".addslashes($tag)."'";
     }
 	$tags = join(',', $myTags);
+	
     return "[{$tags}]";
 }
 
@@ -198,6 +207,27 @@ function sranalytics_textdomain()
 }
 
 /**
+ * Get the current page URL
+ *
+ * @author Eric Lubow <engineering@simplereach.com>
+ * @param None
+ * @return None
+ */
+function current_page_url() {
+	$pageURL = 'http';
+	if( isset($_SERVER["HTTPS"]) ) {
+		if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+	}
+	$pageURL .= "://";
+	if ($_SERVER["SERVER_PORT"] != "80") {
+		$pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+	} else {
+		$pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+	}
+	return $pageURL;
+}
+
+/**
  * Run the appropriate actions on hooks
  *
  * @author Malaney Hill <engineering@simplereach.com>
@@ -209,6 +239,74 @@ function sranalytics_loaded()
     do_action('sranalytics_loaded');
 }
 
+/**
+ * Insert the SimpleReach Javascript on non-content pages
+ *
+ * @author Eric Lubow <engineering@simplereach.com>
+ * @param None
+ * @return None
+ */
+function sranalytics_insert_noncontent_js()
+{
+	// Ignore search or feeds
+#	if(!is_search() || !is_feed() || !is_singular() || !is_attachment()) {
+	if(is_search() || is_feed() || is_singular() || is_attachment()) {
+		return;
+	}
+
+	$SRANALYTICS_PLUGIN_VERSION = SRANALYTICS_PLUGIN_VERSION;
+
+	$sranalytics_pid = get_option('sranalytics_pid');
+
+	$authors = '[]';
+	$tags = '[]';
+	$channels = '[]';
+
+	if (is_tag()) {
+		$term = get_query_var('tag');	
+		$tags = "['".addslashes($term)."']";
+	} else if (is_category()) {
+		$term_id = get_query_var('cat');	
+		$term = get_category($term_id);
+		$channels = "['".addslashes($term->slug)."']";
+	} else if (is_author()) {
+		// XXX Need to figure out the query variable for author
+		$term_id = get_query_var('tag');	
+#		$term = get_author($term_id);
+		$authors = "['".addslashes(the_author())."']";
+	}
+
+
+    $title = get_the_title();
+    $published_date = date("c");
+    $canonical_url = addslashes(current_page_url());
+
+// Get the JS ready to go
+echo <<< SRANALYTICS_SCRIPT_TAG
+<!-- SimpleReach Analytics Plugin Version: {$SRANALYTICS_PLUGIN_VERSION} -->
+<script type='text/javascript' id='simplereach-analytics-tag'>
+    __reach_config = {
+      pid: '${sranalytics_pid}',
+      title: '{$title}',
+      url: '${canonical_url}',
+      date: '${published_date}',
+      authors: {$authors},
+      channels: {$channels},
+      tags: {$tags}
+    };
+    (function(){
+      var s = document.createElement('script');
+      s.async = true;
+      s.type = 'text/javascript';
+      s.src = document.location.protocol + '//simple-cdn.s3.amazonaws.com/js/reach.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(s);
+    })();
+</script>
+SRANALYTICS_SCRIPT_TAG;
+
+return true;
+}
+add_action('wp_footer','sranalytics_insert_noncontent_js');
 add_filter('the_content', 'sranalytics_insert_js');
 add_action('admin_menu','sranalytics_admin_actions');
 ?>
