@@ -9,6 +9,16 @@
             $message = 'Settings updated';
         }
 
+        $sranalytics_show_on_tac_pages = (!empty($_POST['sranalytics_show_on_tac_pages'])) ? $_POST['sranalytics_show_on_tac_pages'] : '';
+        if (update_option('sranalytics_show_on_tac_pages', $sranalytics_show_on_tac_pages)) {
+        	$message = 'Settings updated';
+	}
+
+        $sranalytics_show_on_wp_pages = (!empty($_POST['sranalytics_show_on_wp_pages'])) ? $_POST['sranalytics_show_on_wp_pages'] : '';
+        if (update_option('sranalytics_show_on_wp_pages', $sranalytics_show_on_wp_pages)) {
+        	$message = 'Settings updated';
+	}
+
         $sranalytics_show_global_tag = (!empty($_POST['sranalytics_show_global_tag'])) ? $_POST['sranalytics_show_global_tag'] : '';
         if (update_option('sranalytics_show_global_tag', $sranalytics_show_global_tag)) {
         	$message = 'Settings updated';
@@ -24,8 +34,24 @@
         print '<div id="message" class="updated below-h2">'. $message . '</div>';
     }
 
+    // Set the variables
     $sranalytics_pid = get_option('sranalytics_pid');
-    $sranalytics_show_global_tag = get_option('sranalytics_show_global_tag');
+
+    $sranalytics_show_on_tac_pages_string = get_option('sranalytics_show_on_tac_pages');
+    $sranalytics_show_on_tac_pages = ($sranalytics_show_on_tac_pages_string === 'true');
+    if (empty($sranalytics_show_on_tac_pages)) {
+    	$sranalytics_show_on_tac_pages = false;
+    }
+
+    $sranalytics_show_on_wp_pages_string = get_option('sranalytics_show_on_wp_pages');
+    $sranalytics_show_on_wp_pages = ($sranalytics_show_on_wp_pages_string === 'true');
+    if (empty($sranalytics_show_on_wp_pages)) {
+    	$sranalytics_show_on_wp_pages = false;
+    }
+
+    $sranalytics_show_global_tag_string = get_option('sranalytics_show_global_tag');
+    $sranalytics_show_global_tag = ($sranalytics_show_global_tag_string === 'true');
+
     $sranalytics_global_tag = get_option('sranalytics_global_tag');
 ?>
 <form name="sranalytics_form" method="post" action="<?php print str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">
@@ -40,6 +66,16 @@
 	<li>
             <label for='sranalytics_global_tag'>Global Tag:</label>
             <input type="text" name="sranalytics_global_tag" value="<?php print $sranalytics_global_tag; ?>" style="width:200px;" />
+	</li>
+
+	<li>
+	    <input type="checkbox" id='sranalytics_show_on_tac_pages' name="sranalytics_show_on_tac_pages" value="true" <?php if ($sranalytics_show_on_tac_pages) { print 'CHECKED=CHECKED'; } ?> />
+            <label for='sranalytics_show_on_tac_pages'>Show on tag/author/category pages</label>
+	</li>
+
+	<li>
+	    <input type="checkbox" id='sranalytics_show_on_wp_pages' name="sranalytics_show_on_wp_pages" value="true" <?php if ($sranalytics_show_on_wp_pages) { print 'CHECKED=CHECKED'; } ?> />
+            <label for='sranalytics_show_on_wp_pages'>Show on Wordpress pages</label>
 	</li>
 
 	<li><hr /></li>

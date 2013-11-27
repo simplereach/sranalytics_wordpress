@@ -3,12 +3,12 @@
  Plugin Name: SimpleReach Analytics
  Plugin URI: https://www.simplereach.com
  Description: After installation, you must click '<a href='options-general.php?page=SimpleReach-Analytics'>Settings &rarr; SimpleReach Analytics</a>' to turn on the Analytics.
- Version: 0.0.2
+ Version: 0.0.3
  Author: SimpleReach
  Author URI: https://www.simplereach.com
  */
 
-define('SRANALYTICS_PLUGIN_VERSION', '0.0.2');
+define('SRANALYTICS_PLUGIN_VERSION', '0.0.3');
 define('SRANALYTICS_PLUGIN_URL', PLugin_dir_url(__FILE__));
 define('SRANALYTICS_PLUGIN_SUPPORT_EMAIL', 'support@simplereach.com');
 
@@ -21,27 +21,47 @@ define('SRANALYTICS_PLUGIN_SUPPORT_EMAIL', 'support@simplereach.com');
  */
 function sranalytics_insert_js($content)
 {
+    // Do not show SimpleReach tags by default
+    $sranalytics_show_beacon = false;
+
+    // Get the options
     $sranalytics_pid = get_option('sranalytics_pid');
 
+    $sranalytics_show_on_tac_pages_string = get_option('sranalytics_show_on_tac_pages');
+    $sranalytics_show_on_tac_pages = ($sranalytics_show_on_tac_pages_string === 'true');
+
+    $sranalytics_show_on_wp_pages_string = get_option('sranalytics_show_on_wp_pages');
+    $sranalytics_show_on_wp_pages = ($sranalytics_show_on_wp_pages_string === 'true');
+
     // Try and check the validity of the PID
-    if (empty($sranalytics_pid) || strlen($sranalytics_pid) != 24) {
+    if (empty($sranalytics_pid) or strlen($sranalytics_pid) != 24) {
         return $content;
     }
 
-    // Return the content on anything other than post pages
-    if (!is_singular()) {
-        return $content;
+    // Show the tags if we are on a tag/author/category page and we are supposed to
+    if ((is_category() or is_author() or is_tag()) and $sranalytics_show_on_tac_pages) {
+	$sranalytics_show_beacon = true;
     }
 
-    // Skip attachments and only show on posts
+    // Skip attachment pages
     if (is_attachment()) {
         return $content;
+    }
+
+    // Ensure we show on post pages
+    if (is_single() or is_attachment()) {
+	$sranalytics_show_beacon = true;
+    }
+
+    // Ensure we show on WP pages if we are supposed to
+    if (is_page() and $sranalytics_show_on_wp_pages) {
+	$sranalytics_show_beacon = true;
     }
 
     global $post;
     $post_id = $post->ID;
 
-    // If the post isn't published yet, we don't need a slide
+    // If the post isn't published yet, don't show the __reach_config
     if ($post->post_status != 'publish') {
         return $content;
     }
@@ -67,7 +87,8 @@ $rv = <<< SRANALYTICS_SCRIPT_TAG
       date: '${published_date}',
       authors: {$authors},
       channels: {$channels},
-      tags: {$tags}
+      tags: {$tags},
+      iframe: true
     };
     (function(){
       var s = document.createElement('script');
@@ -79,7 +100,13 @@ $rv = <<< SRANALYTICS_SCRIPT_TAG
 </script>
 SRANALYTICS_SCRIPT_TAG;
 
-    return $content . $rv;
+    echo "DEBUG sranalytics_show_beacon: ${sranalytics_show_beacon}";
+    if ($sranalytics_show_beacon) {
+	# TODO Figure out how to get $rv into <HEAD> tag
+    	return $content . $rv;
+    } else {
+	return $content;
+    }
 }
 
 /**
@@ -277,7 +304,7 @@ function sranalytics_insert_noncontent_js()
 	}
 
 
-    $title = get_the_title();
+    $title = sranalytics_get_page_title();
     $published_date = date("c");
     $canonical_url = addslashes(current_page_url());
 
@@ -292,7 +319,8 @@ echo <<< SRANALYTICS_SCRIPT_TAG
       date: '${published_date}',
       authors: {$authors},
       channels: {$channels},
-      tags: {$tags}
+      tags: {$tags},
+      iframe: true
     };
     (function(){
       var s = document.createElement('script');
@@ -306,7 +334,6 @@ SRANALYTICS_SCRIPT_TAG;
 
 return true;
 }
-add_action('wp_footer','sranalytics_insert_noncontent_js');
 add_filter('the_content', 'sranalytics_insert_js');
 add_action('admin_menu','sranalytics_admin_actions');
 ?>
