@@ -33,24 +33,32 @@ function sranalytics_insert_js($content)
     $sranalytics_show_on_wp_pages_string = get_option('sranalytics_show_on_wp_pages');
     $sranalytics_show_on_wp_pages = ($sranalytics_show_on_wp_pages_string === 'true');
 
+    $sranalytics_show_everywhere_string = get_option('sranalytics_show_everywhere');
+    $sranalytics_show_everywhere = ($sranalytics_show_everywhere_string === 'true');
+
     // Try and check the validity of the PID
     if (empty($sranalytics_pid) or strlen($sranalytics_pid) != 24) {
         return $content;
     }
 
-    // Skip attachment pages
-    if (is_attachment()) {
-        return $content;
-    }
+    // Show everywhere 
+    if ($sranalytics_show_everywhere) {
+    	$sranalytics_show_beacon = true;
+    } else {
+    	// Skip attachment pages
+    	if (is_attachment()) {
+    	    return $content;
+    	}
 
-    // Ensure we show on post pages
-    if (is_single() or is_attachment()) {
-	$sranalytics_show_beacon = true;
-    }
+    	// Ensure we show on post pages
+    	if (is_single() or is_attachment()) {
+    	    $sranalytics_show_beacon = true;
+    	}
 
-    // Ensure we show on WP pages if we are supposed to
-    if (is_page() and $sranalytics_show_on_wp_pages) {
-	$sranalytics_show_beacon = true;
+    	// Ensure we show on WP pages if we are supposed to
+    	if (is_page() and $sranalytics_show_on_wp_pages) {
+    	    $sranalytics_show_beacon = true;
+    	}
     }
 
     global $post;
@@ -72,7 +80,7 @@ function sranalytics_insert_js($content)
     $canonical_url = addslashes(get_permalink($post->ID));
 
     // Show the tags if we are on a tag/author/category page and we are supposed to
-    if ((is_category() or is_author() or is_tag()) and $sranalytics_show_on_tac_pages) {
+    if ((is_category() or is_author() or is_tag()) and ($sranalytics_show_on_tac_pages or $sranalytics_show_everywhere)) {
 	$sranalytics_show_beacon = true;
 	$channels = "[]";
 	$authors = "[]";
@@ -102,18 +110,32 @@ function sranalytics_insert_js($content)
 		$title = "${title} - Page ${paged}";
 	}
 
-	// Set the published_date
+	// TODO Set the published_date
     }
+
+// Handle the homepage properly if we are supposed to fire on it
+if ((is_home() or is_page('home')) and ($sranalytics_show_on_tac_pages or $sranalytics_show_everywhere)) {
+	$title = "Homepage";
+	$channels = "[]";
+	$authors = "[]";
+	if ($sranalytics_show_global_tag) {
+		$tags = "['{$sranalytics_global_tag}']";
+	} else {
+		$tags = "[]";
+	}
+}
+
+// TODO If we are using the global tag, it needs to somehow be inserted here
 
 // Get the JS ready to go
 $rv = <<< SRANALYTICS_SCRIPT_TAG
 <!-- SimpleReach Analytics Plugin Version: {$SRANALYTICS_PLUGIN_VERSION} -->
 <script type='text/javascript' id='simplereach-analytics-tag'>
     __reach_config = {
-      pid: '${sranalytics_pid}',
+      pid: '{$sranalytics_pid}',
       title: '{$title}',
-      url: '${canonical_url}',
-      date: '${published_date}',
+      url: '{$canonical_url}',
+      date: '{$published_date}',
       authors: {$authors},
       channels: {$channels},
       tags: {$tags},
@@ -294,74 +316,7 @@ function sranalytics_loaded()
     do_action('sranalytics_loaded');
 }
 
-/**
- * Insert the SimpleReach Javascript on non-content pages
- *
- * @author Eric Lubow <engineering@simplereach.com>
- * @param None
- * @return None
- */
-function sranalytics_insert_noncontent_js()
-{
-	// Ignore search or feeds
-#	if(!is_search() || !is_feed() || !is_singular() || !is_attachment()) {
-	if(is_search() || is_feed() || is_singular() || is_attachment()) {
-		return;
-	}
-
-	$SRANALYTICS_PLUGIN_VERSION = SRANALYTICS_PLUGIN_VERSION;
-
-	$sranalytics_pid = get_option('sranalytics_pid');
-
-	$authors = '[]';
-	$tags = '[]';
-	$channels = '[]';
-
-	if (is_tag()) {
-		$term = get_query_var('tag');	
-		$tags = "['".addslashes($term)."']";
-	} else if (is_category()) {
-		$term_id = get_query_var('cat');	
-		$term = get_category($term_id);
-		$channels = "['".addslashes($term->slug)."']";
-	} else if (is_author()) {
-		// XXX Need to figure out the query variable for author
-		$term_id = get_query_var('tag');	
-#		$term = get_author($term_id);
-		$authors = "['".addslashes(the_author())."']";
-	}
-
-
-    $title = sranalytics_get_page_title();
-    $published_date = date("c");
-    $canonical_url = addslashes(current_page_url());
-
-// Get the JS ready to go
-echo <<< SRANALYTICS_SCRIPT_TAG
-<!-- SimpleReach Analytics Plugin Version: {$SRANALYTICS_PLUGIN_VERSION} -->
-<script type='text/javascript' id='simplereach-analytics-tag'>
-    __reach_config = {
-      pid: '${sranalytics_pid}',
-      title: '{$title}',
-      url: '${canonical_url}',
-      date: '${published_date}',
-      authors: {$authors},
-      channels: {$channels},
-      tags: {$tags},
-      iframe: true
-    };
-    (function(){
-      var s = document.createElement('script');
-      s.async = true;
-      s.type = 'text/javascript';
-      s.src = document.location.protocol + '//simple-cdn.s3.amazonaws.com/js/reach.js';
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(s);
-    })();
-</script>
-SRANALYTICS_SCRIPT_TAG;
-
-return true;
-}
+// Determine when specific methods are supposed to fire
 add_filter('the_content', 'sranalytics_insert_js');
 add_action('admin_menu','sranalytics_admin_actions');
 ?>
