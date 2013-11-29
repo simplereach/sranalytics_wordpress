@@ -19,6 +19,11 @@
         	$message = 'Settings updated';
 	}
 
+        $sranalytics_show_everywhere = (!empty($_POST['sranalytics_show_everywhere'])) ? $_POST['sranalytics_show_everywhere'] : '';
+        if (update_option('sranalytics_show_everywhere', $sranalytics_show_everywhere)) {
+        	$message = 'Settings updated';
+	}
+
         $sranalytics_show_global_tag = (!empty($_POST['sranalytics_show_global_tag'])) ? $_POST['sranalytics_show_global_tag'] : '';
         if (update_option('sranalytics_show_global_tag', $sranalytics_show_global_tag)) {
         	$message = 'Settings updated';
@@ -41,6 +46,12 @@
     $sranalytics_show_on_tac_pages = ($sranalytics_show_on_tac_pages_string === 'true');
     if (empty($sranalytics_show_on_tac_pages)) {
     	$sranalytics_show_on_tac_pages = false;
+    }
+
+    $sranalytics_show_everywhere_string = get_option('sranalytics_show_everywhere');
+    $sranalytics_show_everywhere = ($sranalytics_show_everywhere_string === 'true');
+    if (empty($sranalytics_show_everywhere)) {
+    	$sranalytics_show_everywhere = false;
     }
 
     $sranalytics_show_on_wp_pages_string = get_option('sranalytics_show_on_wp_pages');
@@ -66,6 +77,11 @@
 	<li>
             <label for='sranalytics_global_tag'>Global Tag:</label>
             <input type="text" name="sranalytics_global_tag" value="<?php print $sranalytics_global_tag; ?>" style="width:200px;" />
+	</li>
+
+	<li>
+	    <input type="checkbox" id='sranalytics_show_everywhere' name="sranalytics_show_everywhere" value="true" <?php if ($sranalytics_show_everywhere) { print 'CHECKED=CHECKED'; } ?> />
+            <label for='sranalytics_show_everywhere'>Show on every Wordpress page on the site</label>
 	</li>
 
 	<li>
