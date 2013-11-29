@@ -38,11 +38,6 @@ function sranalytics_insert_js($content)
         return $content;
     }
 
-    // Show the tags if we are on a tag/author/category page and we are supposed to
-    if ((is_category() or is_author() or is_tag()) and $sranalytics_show_on_tac_pages) {
-	$sranalytics_show_beacon = true;
-    }
-
     // Skip attachment pages
     if (is_attachment()) {
         return $content;
@@ -76,6 +71,40 @@ function sranalytics_insert_js($content)
     $published_date = $post->post_date_gmt;
     $canonical_url = addslashes(get_permalink($post->ID));
 
+    // Show the tags if we are on a tag/author/category page and we are supposed to
+    if ((is_category() or is_author() or is_tag()) and $sranalytics_show_on_tac_pages) {
+	$sranalytics_show_beacon = true;
+	$channels = "[]";
+	$authors = "[]";
+	$tags = "[]";
+
+	// Set the title
+	if (is_tag()) {
+		$tag_page = get_query_var('tag');
+		$title = "Tag: ${tag_page}";
+		$tags = "['${tag_page}']";
+        } elseif (is_author()) {
+		$author_page = get_query_var('author');
+		$title = "Author: ${author_page}";
+		$authors = "['${author_page}']";
+	} elseif (is_category()) {
+       		$channel_page = get_query_var('category');
+		$title = "Category: ${channel_page}";
+		$channels = "['${channel_page}']";
+	} else {
+		// We should NEVER get here
+		$title = "Unkown Page Type";
+        }
+
+	// If we are on a page, then we need to add it
+	$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+	if ($paged > 1) {
+		$title = "${title} - Page ${paged}";
+	}
+
+	// Set the published_date
+    }
+
 // Get the JS ready to go
 $rv = <<< SRANALYTICS_SCRIPT_TAG
 <!-- SimpleReach Analytics Plugin Version: {$SRANALYTICS_PLUGIN_VERSION} -->
@@ -100,7 +129,6 @@ $rv = <<< SRANALYTICS_SCRIPT_TAG
 </script>
 SRANALYTICS_SCRIPT_TAG;
 
-    echo "DEBUG sranalytics_show_beacon: ${sranalytics_show_beacon}";
     if ($sranalytics_show_beacon) {
 	# TODO Figure out how to get $rv into <HEAD> tag
     	return $content . $rv;
