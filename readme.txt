@@ -1,5 +1,5 @@
 === SimpleReach Analytics ===
-Tags: articles, content, headlines, links, pageviews, plugin, recommendation, social, simplereach, analytics, traffic, posts, best, readers, engagement, simple, reach, native, advertising
+Tags: articles, content, headlines, links, pageviews, plugin, social, simplereach, analytics, traffic, posts, best, readers, engagement, simple, reach, native, advertising
 Contributors: elubow
 Plugin Name: SimpleReach Analytics
 Plugin URI: https://github.com/simplereach/sranalytics_wordpress
@@ -15,13 +15,15 @@ SimpleReach Analytics finds trending articles and gives publishers deep insights
 3. Click Plugins -> Add New -> Upload
 4. After installation, go to _Settings -> SimpleReach Analytics_ in your plugins list and click _Activate_.
 5. Enter your PID (Publisher ID) and click _Save_.
-6. You're finished!
+6. Pick which pages you want SimpleReach to track.
+7. You're finished!
 
 == Changelog ==
 
 = 0.0.3 =
 * Fixes for when to show on all pages
 * Allow for customizing where the SimpleReach beacon shows
+* Cleaned up Settings page look
 
 = 0.0.2 =
 * Added all pages checkbox
