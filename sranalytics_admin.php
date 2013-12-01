@@ -65,51 +65,84 @@
 
     $sranalytics_global_tag = get_option('sranalytics_global_tag');
 ?>
+
+<div class='overview'>
+  <h2><?php _e('SimpleReach Analytics', 'sranalytics_admin_title'); ?></h2>
+</div>
+
 <form name="sranalytics_form" method="post" action="<?php print str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">
-<div class='wrap'>   
-    <h2><?php _e('SimpleReach Analytics', 'sranalytics'); ?></h2>
-    <ul>
-	<li>
-	    <p>This tag will go on every page in main section (non-admin) of your site including the homepage.</p>
-	    <input type="checkbox" id='sranalytics_show_global_tag' name="sranalytics_show_global_tag" value="true" <?php if ($sranalytics_show_global_tag) { print 'CHECKED=CHECKED'; } ?> />
-	    <label for='sranalytics_show_global_tag'>Use Global Tag</label>
-	</li>
-	<li>
-            <label for='sranalytics_global_tag'>Global Tag:</label>
-            <input type="text" name="sranalytics_global_tag" value="<?php print $sranalytics_global_tag; ?>" style="width:200px;" />
-	</li>
+<div id='poststuff' class='wrap'>   
+<div id='post-body' class='metabox-holder colums-2'>
+<div id='post-body-content'>
+  <div class='postbox'>
+    <h3 class='hndle'><span><?php _e('Settings', 'sranalytics_admin_settings_box_title'); ?></span></h3>
+    <div class='inside'>
+      <ul>
+          <li>
+              <p>This tag will go on every page in main section (non-admin) of your site including the homepage.</p>
+              <input type="checkbox" id='sranalytics_show_global_tag' name="sranalytics_show_global_tag" value="true" <?php if ($sranalytics_show_global_tag) { print 'CHECKED=CHECKED'; } ?> />
+              <label for='sranalytics_show_global_tag'>Use Global Tag</label>
+          </li>
+          <li>
+              <label for='sranalytics_global_tag'>Global Tag:</label>
+              <input type="text" name="sranalytics_global_tag" value="<?php print $sranalytics_global_tag; ?>" style="width:200px;" />
+          </li>
 
-	<li>
-	    <input type="checkbox" id='sranalytics_show_everywhere' name="sranalytics_show_everywhere" value="true" <?php if ($sranalytics_show_everywhere) { print 'CHECKED=CHECKED'; } ?> />
-            <label for='sranalytics_show_everywhere'>Show on every Wordpress page on the site</label>
-	</li>
+          <li>
+              <input type="checkbox" id='sranalytics_show_everywhere' name="sranalytics_show_everywhere" value="true" <?php if ($sranalytics_show_everywhere) { print 'CHECKED=CHECKED'; } ?> />
+              <label for='sranalytics_show_everywhere'>Show on every Wordpress page on the site</label>
+          </li>
 
-	<li>
-	    <input type="checkbox" id='sranalytics_show_on_tac_pages' name="sranalytics_show_on_tac_pages" value="true" <?php if ($sranalytics_show_on_tac_pages) { print 'CHECKED=CHECKED'; } ?> />
-            <label for='sranalytics_show_on_tac_pages'>Show on tag/author/category pages</label>
-	</li>
+          <li>
+              <input type="checkbox" id='sranalytics_show_on_tac_pages' name="sranalytics_show_on_tac_pages" value="true" <?php if ($sranalytics_show_on_tac_pages) { print 'CHECKED=CHECKED'; } ?> />
+              <label for='sranalytics_show_on_tac_pages'>Show on tag/author/category pages</label>
+          </li>
 
-	<li>
-	    <input type="checkbox" id='sranalytics_show_on_wp_pages' name="sranalytics_show_on_wp_pages" value="true" <?php if ($sranalytics_show_on_wp_pages) { print 'CHECKED=CHECKED'; } ?> />
-            <label for='sranalytics_show_on_wp_pages'>Show on Wordpress pages</label>
-	</li>
+          <li>
+              <input type="checkbox" id='sranalytics_show_on_wp_pages' name="sranalytics_show_on_wp_pages" value="true" <?php if ($sranalytics_show_on_wp_pages) { print 'CHECKED=CHECKED'; } ?> />
+              <label for='sranalytics_show_on_wp_pages'>Show on Wordpress pages</label>
+          </li>
+          <li><input class='button-primary' type="submit" name="Submit" value="<?php _e('Save', 'sranalytics'); ?>" /></li>
+      </ul>
+    </div>
+  </div>
 
-	<li><hr /></li>
-        <li>
-            <div id="sranalytics_controls">
-                <input type="hidden" name="sranalytics_submitted" value="1" />
-                <label for="sranalytics_submitted"><?php _e('Enter your Publisher ID (PID): ', 'sranalytics'); ?></label>
-                <input type="text" name="sranalytics_pid" value="<?php print $sranalytics_pid; ?>" style="width:200px;" />
-                <?php if (!empty($sranalytics_pid) && isset($sranalytics_pid)) { ?>
-                    <br />
-                    <span style="color:red;font-size:10px;">
-                        * Do not change this unless you are absolutely sure you know what you are doing!
-                    </span>
-                <?php } ?>
-            </div>
-        </li>
+  <div class='postbox'>
+    <h3 class='hndle'><span><?php _e('Publisher ID', 'sranalytics_admin_settings_publisher_id'); ?></span></h3>
+    <div class='inside'>
+      <ul>
+          <li>
+              <div id="sranalytics_controls">
+                  <input type="hidden" name="sranalytics_submitted" value="1" />
+                  <label for="sranalytics_submitted"><?php _e('Enter your Publisher ID (PID): ', 'sranalytics'); ?></label>
+                  <input type="text" name="sranalytics_pid" value="<?php print $sranalytics_pid; ?>" style="width:200px;" />
+                  <?php if (!empty($sranalytics_pid) && isset($sranalytics_pid)) { ?>
+                      <br />
+                      <span style="color:red;font-size:10px;">
+                          * Do not change this unless you are absolutely sure you know what you are doing!
+                      </span>
+                  <?php } ?>
+              </div>
+          </li>
+          <li><input class='button-primary' type="submit" name="Submit" value="<?php _e('Save', 'sranalytics'); ?>" /></li>
+      </ul>
+    </div>
+  </div>
+</div>
 
-        <li><input class='button-primary' type="submit" name="Submit" value="<?php _e('Save', 'sranalytics'); ?>" /></li>
-    </ul>
+<div id='postbox-container-1' class='postbox-container'>
+<div class='meta-box-sortables ui-sortable'>
+  <div class='postbox'>
+    <h3 class='hndle'>Support</h3>
+    <div class='inside'>
+      <p>
+	Questions? Comments? We can be contacted via <a href='mailto:support@simplereach.com'>SimpleReach Support</a>.
+      </p>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
 </div>
 </form>
