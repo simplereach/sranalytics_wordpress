@@ -118,11 +118,7 @@ if ((is_home() or is_page('home')) and ($sranalytics_show_on_tac_pages or $srana
 	$title = "Homepage";
 	$channels = "[]";
 	$authors = "[]";
-	if ($sranalytics_show_global_tag) {
-		$tags = "['{$sranalytics_global_tag}']";
-	} else {
-		$tags = "[]";
-	}
+	$tags = "[]";
 }
 
 // TODO If we are using the global tag, it needs to somehow be inserted here
@@ -221,14 +217,6 @@ function sranalytics_get_post_tags($post)
 {
     $wptags = wp_get_post_tags($post->ID);
     $myTags = array();
-
-    // Check to see if we are using the global tag
-    $sranalytics_show_global_tag_string = get_option('sranalytics_show_global_tag');
-    $sranalytics_show_global_tag = ($sranalytics_show_global_tag_string === 'true');
-    $sranalytics_global_tag = get_option('sranalytics_global_tag');
-    if ($sranalytics_show_global_tag) {
-    	array_push($myTags, "'$sranalytics_global_tag'");
-    }
 
     foreach ($wptags as $tag) {
         $myTags[] = (is_object($tag)) ? "'".addslashes($tag->name)."'" : "'".addslashes($tag)."'";

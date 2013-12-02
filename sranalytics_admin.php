@@ -24,16 +24,6 @@
         	$message = 'Settings updated';
 	}
 
-        $sranalytics_show_global_tag = (!empty($_POST['sranalytics_show_global_tag'])) ? $_POST['sranalytics_show_global_tag'] : '';
-        if (update_option('sranalytics_show_global_tag', $sranalytics_show_global_tag)) {
-        	$message = 'Settings updated';
-	}
-
-        $sranalytics_global_tag = (!empty($_POST['sranalytics_global_tag'])) ? $_POST['sranalytics_global_tag'] : '';
-        if (update_option('sranalytics_global_tag', $sranalytics_global_tag)) {
-            $message = 'Settings updated';
-        }
-
     }
     if ($message) {
         print '<div id="message" class="updated below-h2">'. $message . '</div>';
@@ -59,11 +49,6 @@
     if (empty($sranalytics_show_on_wp_pages)) {
     	$sranalytics_show_on_wp_pages = false;
     }
-
-    $sranalytics_show_global_tag_string = get_option('sranalytics_show_global_tag');
-    $sranalytics_show_global_tag = ($sranalytics_show_global_tag_string === 'true');
-
-    $sranalytics_global_tag = get_option('sranalytics_global_tag');
 ?>
 
 <div class='overview'>
@@ -78,16 +63,6 @@
     <h3 class='hndle'><span><?php _e('Settings', 'sranalytics_admin_settings_box_title'); ?></span></h3>
     <div class='inside'>
       <ul>
-          <li>
-              <p>This tag will go on every page in main section (non-admin) of your site including the homepage.</p>
-              <input type="checkbox" id='sranalytics_show_global_tag' name="sranalytics_show_global_tag" value="true" <?php if ($sranalytics_show_global_tag) { print 'CHECKED=CHECKED'; } ?> />
-              <label for='sranalytics_show_global_tag'>Use Global Tag</label>
-          </li>
-          <li>
-              <label for='sranalytics_global_tag'>Global Tag:</label>
-              <input type="text" name="sranalytics_global_tag" value="<?php print $sranalytics_global_tag; ?>" style="width:200px;" />
-          </li>
-
           <li>
               <input type="checkbox" id='sranalytics_show_everywhere' name="sranalytics_show_everywhere" value="true" <?php if ($sranalytics_show_everywhere) { print 'CHECKED=CHECKED'; } ?> />
               <label for='sranalytics_show_everywhere'>Show on every Wordpress page on the site</label>
