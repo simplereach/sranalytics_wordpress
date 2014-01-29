@@ -5,7 +5,7 @@ Plugin Name: SimpleReach Analytics
 Plugin URI: https://github.com/simplereach/sranalytics_wordpress
 Requires at least: 2.7
 Tested up to: 3.6.0
-Stable tag: 0.0.3
+Stable tag: 0.0.4
 
 SimpleReach Analytics finds trending articles and gives publishers deep insights into their social traffic.
 
@@ -19,6 +19,10 @@ SimpleReach Analytics finds trending articles and gives publishers deep insights
 7. You're finished!
 
 == Changelog ==
+
+= 0.0.4 =
+* SimpleReach tag fires in <head> now for speed
+* Made iframe loading optional for complex AJAX sites
 
 = 0.0.3 =
 * Fixes for when to show on all pages

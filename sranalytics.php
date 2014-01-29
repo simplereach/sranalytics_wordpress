@@ -3,12 +3,12 @@
  Plugin Name: SimpleReach Analytics
  Plugin URI: https://www.simplereach.com
  Description: After installation, you must click '<a href='options-general.php?page=SimpleReach-Analytics'>Settings &rarr; SimpleReach Analytics</a>' to turn on the Analytics.
- Version: 0.0.3
+ Version: 0.0.4
  Author: SimpleReach
  Author URI: https://www.simplereach.com
  */
 
-define('SRANALYTICS_PLUGIN_VERSION', '0.0.3');
+define('SRANALYTICS_PLUGIN_VERSION', '0.0.4');
 define('SRANALYTICS_PLUGIN_URL', PLugin_dir_url(__FILE__));
 define('SRANALYTICS_PLUGIN_SUPPORT_EMAIL', 'support@simplereach.com');
 
@@ -19,7 +19,7 @@ define('SRANALYTICS_PLUGIN_SUPPORT_EMAIL', 'support@simplereach.com');
  * @param String $content the_content() output
  * @return String The content and The Slide code (if applicable)
  */
-function sranalytics_insert_js($content)
+function sranalytics_insert_js()
 {
     // Do not show SimpleReach tags by default
     $sranalytics_show_beacon = false;
@@ -36,9 +36,12 @@ function sranalytics_insert_js($content)
     $sranalytics_show_everywhere_string = get_option('sranalytics_show_everywhere');
     $sranalytics_show_everywhere = ($sranalytics_show_everywhere_string === 'true');
 
+    $sranalytics_disable_iframe_loading_string = get_option('sranalytics_disable_iframe_loading');
+    $sranalytics_disable_iframe_loading = ($sranalytics_disable_iframe_loading_string === 'true');
+
     // Try and check the validity of the PID
     if (empty($sranalytics_pid) or strlen($sranalytics_pid) != 24) {
-        return $content;
+        return False;
     }
 
     // Show everywhere 
@@ -47,7 +50,7 @@ function sranalytics_insert_js($content)
     } else {
     	// Skip attachment pages
     	if (is_attachment()) {
-    	    return $content;
+    	    return False;
     	}
 
     	// Ensure we show on post pages
@@ -66,7 +69,7 @@ function sranalytics_insert_js($content)
 
     // If the post isn't published yet, don't show the __reach_config
     if ($post->post_status != 'publish') {
-        return $content;
+        return False;
     }
 
     $SRANALYTICS_PLUGIN_VERSION = SRANALYTICS_PLUGIN_VERSION;
@@ -121,6 +124,13 @@ if ((is_home() or is_page('home')) and ($sranalytics_show_on_tac_pages or $srana
 	$tags = "[]";
 }
 
+// Disable the iframe loading if the settings say so
+if ($sranalytics_disable_iframe_loading == 'true') {
+      $iframe = "iframe: false";
+} else {
+      $iframe = "iframe: true";
+}
+
 // TODO If we are using the global tag, it needs to somehow be inserted here
 
 // Get the JS ready to go
@@ -129,13 +139,13 @@ $rv = <<< SRANALYTICS_SCRIPT_TAG
 <script type='text/javascript' id='simplereach-analytics-tag'>
     __reach_config = {
       pid: '{$sranalytics_pid}',
+      {$iframe},
       title: '{$title}',
       url: '{$canonical_url}',
       date: '{$published_date}',
       authors: {$authors},
       channels: {$channels},
-      tags: {$tags},
-      iframe: true
+      tags: {$tags}
     };
     (function(){
       var s = document.createElement('script');
@@ -148,10 +158,9 @@ $rv = <<< SRANALYTICS_SCRIPT_TAG
 SRANALYTICS_SCRIPT_TAG;
 
     if ($sranalytics_show_beacon) {
-	# TODO Figure out how to get $rv into <HEAD> tag
-    	return $content . $rv;
+    	echo $rv;
     } else {
-	return $content;
+	return False;
     }
 }
 
@@ -293,19 +302,7 @@ function current_page_url() {
 	return $pageURL;
 }
 
-/**
- * Run the appropriate actions on hooks
- *
- * @author Malaney Hill <engineering@simplereach.com>
- * @param None
- * @return None
- */
-function sranalytics_loaded()
-{
-    do_action('sranalytics_loaded');
-}
-
 // Determine when specific methods are supposed to fire
-add_filter('the_content', 'sranalytics_insert_js');
+add_action('wp_head', 'sranalytics_insert_js', 1);
 add_action('admin_menu','sranalytics_admin_actions');
 ?>

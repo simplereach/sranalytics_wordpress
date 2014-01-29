@@ -24,6 +24,11 @@
         	$message = 'Settings updated';
 	}
 
+        $sranalytics_disable_iframe_loading = (!empty($_POST['sranalytics_disable_iframe_loading'])) ? $_POST['sranalytics_disable_iframe_loading'] : '';
+        if (update_option('sranalytics_disable_iframe_loading', $sranalytics_disable_iframe_loading)) {
+        	$message = 'Settings updated';
+	}
+
     }
     if ($message) {
         print '<div id="message" class="updated below-h2">'. $message . '</div>';
@@ -48,6 +53,12 @@
     $sranalytics_show_on_wp_pages = ($sranalytics_show_on_wp_pages_string === 'true');
     if (empty($sranalytics_show_on_wp_pages)) {
     	$sranalytics_show_on_wp_pages = false;
+    }
+
+    $sranalytics_disable_iframe_loading_string = get_option('sranalytics_disable_iframe_loading');
+    $sranalytics_disable_iframe_loading = ($sranalytics_disable_iframe_loading_string === 'true');
+    if (empty($sranalytics_show_on_wp_pages)) {
+    	$sranalytics_disable_iframe_loading = false;
     }
 ?>
 
@@ -76,6 +87,10 @@
           <li>
               <input type="checkbox" id='sranalytics_show_on_wp_pages' name="sranalytics_show_on_wp_pages" value="true" <?php if ($sranalytics_show_on_wp_pages) { print 'CHECKED=CHECKED'; } ?> />
               <label for='sranalytics_show_on_wp_pages'>Show on Wordpress pages</label>
+          </li>
+          <li>
+              <input type="checkbox" id='sranalytics_disable_iframe_loading' name="sranalytics_disable_iframe_loading" value="true" <?php if ($sranalytics_disable_iframe_loading) { print 'CHECKED=CHECKED'; } ?> />
+              <label for='sranalytics_disable_iframe_loading'>Disable iFrame loading of the SimpleReach code (<span style='color:red;font-size:10px;'><strong>WARNING</strong>: disabling will make your analytics less accurate</span>)</label>
           </li>
           <li><input class='button-primary' type="submit" name="Submit" value="<?php _e('Save', 'sranalytics'); ?>" /></li>
       </ul>
