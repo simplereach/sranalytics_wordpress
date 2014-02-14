@@ -87,7 +87,7 @@
 
           <li>
               <input type="checkbox" id='sranalytics_show_everywhere' name="sranalytics_show_everywhere" value="true" <?php if ($sranalytics_show_everywhere) { print 'CHECKED=CHECKED'; } ?> />
-              <label for='sranalytics_show_everywhere'>Track everything, including the home page (includes WordPress, author, category, and tag pages)</label>
+              <label for='sranalytics_show_everywhere'>Track everything, including the home page (includes WordPress, author, category, tag, and search results pages)</label>
           </li>
           <li><input class='button-primary' type="submit" name="Submit" value="<?php _e('Save', 'sranalytics'); ?>" /></li>
       </ul>
