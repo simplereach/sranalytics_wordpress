@@ -77,7 +77,7 @@
       <ul>
           <li>
               <input type="checkbox" id='sranalytics_show_on_wp_pages' name="sranalytics_show_on_wp_pages" value="true" <?php if ($sranalytics_show_on_wp_pages) { print 'CHECKED=CHECKED'; } ?> />
-              <label for='sranalytics_show_on_wp_pages'>Track WordPress pages</label>
+              <label for='sranalytics_show_on_wp_pages'>Track pages (these are the pages you create from the 'Pages' link in the left sidebar)</label>
           </li>
 
           <li>
