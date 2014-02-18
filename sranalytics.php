@@ -8,7 +8,7 @@
  Author URI: https://www.simplereach.com
  */
 
-define('SRANALYTICS_PLUGIN_VERSION', '0.0.4');
+define('SRANALYTICS_PLUGIN_VERSION', '0.0.5');
 define('SRANALYTICS_PLUGIN_URL', PLugin_dir_url(__FILE__));
 define('SRANALYTICS_PLUGIN_SUPPORT_EMAIL', 'support@simplereach.com');
 
