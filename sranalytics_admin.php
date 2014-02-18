@@ -71,7 +71,7 @@
 <div id='post-body' class='metabox-holder colums-2'>
 <div id='post-body-content'>
   <div class='postbox'>
-    <h3 class='hndle'><span><?php _e('Tracking Settings', 'sranalytics_admin_settings_box_title'); ?></span></h3>
+    <h3 class='hndle'><span><?php _e('Advanced Tracking Settings', 'sranalytics_admin_settings_box_title'); ?></span></h3>
     <div class='inside'>
       <p>WordPress posts are tracked by default. If you'd like to track additional parts of your site, please use the settings below.</p>
       <ul>
