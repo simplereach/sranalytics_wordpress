@@ -83,7 +83,7 @@
                   <?php if (!empty($sranalytics_pid) && isset($sranalytics_pid)) { ?>
                       <br />
                       <span style="color:red;font-size:10px;">
-                          * Do not change this unless you are absolutely sure you know what you are doing!
+                          * You only need to set this once. Do not change this unless you are absolutely sure you know what you are doing!
                       </span>
                   <?php } ?>
               </div>
@@ -113,7 +113,7 @@
       <ul>
           <li>
               <input type="checkbox" id='sranalytics_show_on_wp_pages' name="sranalytics_show_on_wp_pages" value="true" <?php if ($sranalytics_show_on_wp_pages) { print 'CHECKED=CHECKED'; } ?> />
-              <label for='sranalytics_show_on_wp_pages'>Track WordPress pages</label>
+              <label for='sranalytics_show_on_wp_pages'>Track pages (these are the pages you create from the 'Pages' link in the left sidebar)</label>
           </li>
 
           <li>
