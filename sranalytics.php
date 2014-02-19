@@ -3,12 +3,12 @@
  Plugin Name: SimpleReach Analytics
  Plugin URI: https://www.simplereach.com
  Description: After installation, you must click '<a href='options-general.php?page=SimpleReach-Analytics'>Settings &rarr; SimpleReach Analytics</a>' to turn on the Analytics.
- Version: 0.0.5
+ Version: 0.0.6
  Author: SimpleReach
  Author URI: https://www.simplereach.com
  */
 
-define('SRANALYTICS_PLUGIN_VERSION', '0.0.5');
+define('SRANALYTICS_PLUGIN_VERSION', '0.0.6');
 define('SRANALYTICS_PLUGIN_URL', PLugin_dir_url(__FILE__));
 define('SRANALYTICS_PLUGIN_SUPPORT_EMAIL', 'support@simplereach.com');
 
