@@ -188,7 +188,7 @@ function sranalytics_get_post_title($post)
  */
 function sranalytics_get_post_authors($post)
 {
-    $author = "'".addslashes(get_the_author())."'";
+    $author = "'".addslashes(get_author_name($post->post_author))."'";
     return "[{$author}]";
 }
 
