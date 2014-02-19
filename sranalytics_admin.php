@@ -82,7 +82,7 @@
                   <?php if (!empty($sranalytics_pid) && isset($sranalytics_pid)) { ?>
                       <br />
                       <span style="color:red;font-size:10px;">
-                          * Do not change this unless you are absolutely sure you know what you are doing!
+                          * You only need to set this once. Do not change this unless you are absolutely sure you know what you are doing!
                       </span>
                   <?php } ?>
               </div>
