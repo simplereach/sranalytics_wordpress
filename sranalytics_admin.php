@@ -70,24 +70,23 @@
 <div id='poststuff' class='wrap'>   
 <div id='post-body' class='metabox-holder colums-2'>
 <div id='post-body-content'>
+
   <div class='postbox'>
-    <h3 class='hndle'><span><?php _e('Tracking Settings', 'sranalytics_admin_settings_box_title'); ?></span></h3>
+    <h3 class='hndle'><span><?php _e('Publisher ID', 'sranalytics_admin_settings_publisher_id'); ?></span></h3>
     <div class='inside'>
-      <p>WordPress posts are tracked by default. If you'd like to track additional parts of your site, please use the settings below.</p>
       <ul>
           <li>
-              <input type="checkbox" id='sranalytics_show_on_wp_pages' name="sranalytics_show_on_wp_pages" value="true" <?php if ($sranalytics_show_on_wp_pages) { print 'CHECKED=CHECKED'; } ?> />
-              <label for='sranalytics_show_on_wp_pages'>Track WordPress pages</label>
-          </li>
-
-          <li>
-              <input type="checkbox" id='sranalytics_show_on_tac_pages' name="sranalytics_show_on_tac_pages" value="true" <?php if ($sranalytics_show_on_tac_pages) { print 'CHECKED=CHECKED'; } ?> />
-              <label for='sranalytics_show_on_tac_pages'>Track author, category, and tag pages</label>
-          </li>
-
-          <li>
-              <input type="checkbox" id='sranalytics_show_everywhere' name="sranalytics_show_everywhere" value="true" <?php if ($sranalytics_show_everywhere) { print 'CHECKED=CHECKED'; } ?> />
-              <label for='sranalytics_show_everywhere'>Track everything, including the home page (includes WordPress, author, category, tag, and search results pages)</label>
+              <div id="sranalytics_controls">
+                  <input type="hidden" name="sranalytics_submitted" value="1" />
+                  <label for="sranalytics_submitted"><?php _e('Enter your Publisher ID (PID): ', 'sranalytics'); ?></label>
+                  <input type="text" name="sranalytics_pid" value="<?php print $sranalytics_pid; ?>" style="width:200px;" />
+                  <?php if (!empty($sranalytics_pid) && isset($sranalytics_pid)) { ?>
+                      <br />
+                      <span style="color:red;font-size:10px;">
+                          * Do not change this unless you are absolutely sure you know what you are doing!
+                      </span>
+                  <?php } ?>
+              </div>
           </li>
           <li><input class='button-primary' type="submit" name="Submit" value="<?php _e('Save', 'sranalytics'); ?>" /></li>
       </ul>
@@ -108,21 +107,23 @@
   </div>
 
   <div class='postbox'>
-    <h3 class='hndle'><span><?php _e('Publisher ID', 'sranalytics_admin_settings_publisher_id'); ?></span></h3>
+    <h3 class='hndle'><span><?php _e('Advanced Tracking Settings', 'sranalytics_admin_settings_box_title'); ?></span></h3>
     <div class='inside'>
+      <p>WordPress posts are tracked by default. If you'd like to track additional parts of your site, please use the settings below.</p>
       <ul>
           <li>
-              <div id="sranalytics_controls">
-                  <input type="hidden" name="sranalytics_submitted" value="1" />
-                  <label for="sranalytics_submitted"><?php _e('Enter your Publisher ID (PID): ', 'sranalytics'); ?></label>
-                  <input type="text" name="sranalytics_pid" value="<?php print $sranalytics_pid; ?>" style="width:200px;" />
-                  <?php if (!empty($sranalytics_pid) && isset($sranalytics_pid)) { ?>
-                      <br />
-                      <span style="color:red;font-size:10px;">
-                          * Do not change this unless you are absolutely sure you know what you are doing!
-                      </span>
-                  <?php } ?>
-              </div>
+              <input type="checkbox" id='sranalytics_show_on_wp_pages' name="sranalytics_show_on_wp_pages" value="true" <?php if ($sranalytics_show_on_wp_pages) { print 'CHECKED=CHECKED'; } ?> />
+              <label for='sranalytics_show_on_wp_pages'>Track WordPress pages</label>
+          </li>
+
+          <li>
+              <input type="checkbox" id='sranalytics_show_on_tac_pages' name="sranalytics_show_on_tac_pages" value="true" <?php if ($sranalytics_show_on_tac_pages) { print 'CHECKED=CHECKED'; } ?> />
+              <label for='sranalytics_show_on_tac_pages'>Track author, category, and tag pages</label>
+          </li>
+
+          <li>
+              <input type="checkbox" id='sranalytics_show_everywhere' name="sranalytics_show_everywhere" value="true" <?php if ($sranalytics_show_everywhere) { print 'CHECKED=CHECKED'; } ?> />
+              <label for='sranalytics_show_everywhere'>Track everything, including the home page (includes WordPress, author, category, tag, and search results pages)</label>
           </li>
           <li><input class='button-primary' type="submit" name="Submit" value="<?php _e('Save', 'sranalytics'); ?>" /></li>
       </ul>
