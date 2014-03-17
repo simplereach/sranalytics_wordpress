@@ -8,7 +8,7 @@
  Author URI: https://www.simplereach.com
  */
 
-define('SRANALYTICS_PLUGIN_VERSION', '0.0.6');
+define('SRANALYTICS_PLUGIN_VERSION', '0.0.7');
 define('SRANALYTICS_PLUGIN_URL', PLugin_dir_url(__FILE__));
 define('SRANALYTICS_PLUGIN_SUPPORT_EMAIL', 'support@simplereach.com');
 
@@ -35,6 +35,9 @@ function sranalytics_insert_js()
 
     $sranalytics_show_everywhere_string = get_option('sranalytics_show_everywhere');
     $sranalytics_show_everywhere = ($sranalytics_show_everywhere_string === 'true');
+
+    $sranalytics_force_http_string = get_option('sranalytics_force_http');
+    $sranalytics_force_http = ($sranalytics_force_http_string === 'true');
 
     $sranalytics_disable_iframe_loading_string = get_option('sranalytics_disable_iframe_loading');
     $sranalytics_disable_iframe_loading = ($sranalytics_disable_iframe_loading_string === 'true');
@@ -81,6 +84,12 @@ function sranalytics_insert_js()
     $channels = sranalytics_get_post_channels($post);
     $published_date = $post->post_date_gmt;
     $canonical_url = addslashes(get_permalink($post->ID));
+
+    //force https to http if option is checked
+    if($sranalytics_force_http){
+        $pattern = '/^https:\/\//';
+        $canonical_url = preg_replace( $pattern , "http://" , $canonical_url);
+    }
 
     // Show the tags if we are on a tag/author/category page and we are supposed to
     if ((is_category() or is_author() or is_tag()) and ($sranalytics_show_on_tac_pages or $sranalytics_show_everywhere)) {
