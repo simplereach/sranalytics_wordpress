@@ -135,7 +135,7 @@
           </li>
           <li>
               <input type="checkbox" id='sranalytics_force_http' name="sranalytics_force_http" value="true" <?php if ($sranalytics_force_http) { print 'CHECKED=CHECKED'; } ?> />
-              <label for='sranalytics_force_http'>Force HTTPS urls to be sent as HTTP</label>
+              <label for='sranalytics_force_http'>Send urls as HTTP. If your site uses a combination of both HTTP and HTTPS, enable this option.</label>
           </li>
           <li><input class='button-primary' type="submit" name="Submit" value="<?php _e('Save', 'sranalytics'); ?>" /></li>
       </ul>
