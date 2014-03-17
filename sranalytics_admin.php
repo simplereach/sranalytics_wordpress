@@ -23,7 +23,10 @@
         if (update_option('sranalytics_show_everywhere', $sranalytics_show_everywhere)) {
         	$message = 'Settings updated';
 	}
-
+        $sranalytics_force_http = (!empty($_POST['sranalytics_force_http'])) ? $_POST['sranalytics_force_http'] : '';
+        if (update_option('sranalytics_force_http', $sranalytics_force_http)) {
+        	$message = 'Settings updated';
+	}
         $sranalytics_disable_iframe_loading = (!empty($_POST['sranalytics_disable_iframe_loading'])) ? $_POST['sranalytics_disable_iframe_loading'] : '';
         if (update_option('sranalytics_disable_iframe_loading', $sranalytics_disable_iframe_loading)) {
         	$message = 'Settings updated';
@@ -55,6 +58,11 @@
     	$sranalytics_show_on_wp_pages = false;
     }
 
+    $sranalytics_force_http_string = get_option('sranalytics_force_http');
+    $sranalytics_force_http = ($sranalytics_force_http_string == "true");
+    if (empty($sranalytics_force_http)) {
+    	$sranalytics_force_http = false;
+    }
     $sranalytics_disable_iframe_loading_string = get_option('sranalytics_disable_iframe_loading');
     $sranalytics_disable_iframe_loading = ($sranalytics_disable_iframe_loading_string === 'true');
     if (empty($sranalytics_show_on_wp_pages)) {
@@ -124,6 +132,10 @@
           <li>
               <input type="checkbox" id='sranalytics_show_everywhere' name="sranalytics_show_everywhere" value="true" <?php if ($sranalytics_show_everywhere) { print 'CHECKED=CHECKED'; } ?> />
               <label for='sranalytics_show_everywhere'>Track everything, including the home page (includes WordPress, author, category, tag, and search results pages)</label>
+          </li>
+          <li>
+              <input type="checkbox" id='sranalytics_force_http' name="sranalytics_force_http" value="true" <?php if ($sranalytics_force_http) { print 'CHECKED=CHECKED'; } ?> />
+              <label for='sranalytics_force_http'>Force HTTPS urls to be sent as HTTP</label>
           </li>
           <li><input class='button-primary' type="submit" name="Submit" value="<?php _e('Save', 'sranalytics'); ?>" /></li>
       </ul>
