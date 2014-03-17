@@ -87,7 +87,7 @@ function sranalytics_insert_js()
 
     //force https to http if option is checked
     if($sranalytics_force_http){
-        $pattern = '/https:\/\//';
+        $pattern = '/^https:\/\//';
         $canonical_url = preg_replace( $pattern , "http://" , $canonical_url);
     }
 
