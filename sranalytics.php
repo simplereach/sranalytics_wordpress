@@ -8,7 +8,7 @@
  Author URI: https://www.simplereach.com
  */
 
-define('SRANALYTICS_PLUGIN_VERSION', '0.0.7');
+define('SRANALYTICS_PLUGIN_VERSION', '0.0.8');
 define('SRANALYTICS_PLUGIN_URL', PLugin_dir_url(__FILE__));
 define('SRANALYTICS_PLUGIN_SUPPORT_EMAIL', 'support@simplereach.com');
 
@@ -49,25 +49,25 @@ function sranalytics_insert_js()
 
     // Show everywhere 
     if ($sranalytics_show_everywhere) {
-    	$sranalytics_show_beacon = true;
+        $sranalytics_show_beacon = true;
     } else {
-    	// Skip attachment pages
-    	if (is_attachment()) {
-    	    return False;
-    	}
+        // Skip attachment pages
+        if (is_attachment()) {
+            return False;
+        }
 
-    	// Ensure we show on post pages
-    	if (is_single() or is_attachment()) {
-    	    $sranalytics_show_beacon = true;
-    	}
+        // Ensure we show on post pages
+        if (is_single() or is_attachment()) {
+            $sranalytics_show_beacon = true;
+        }
 
-    	// Ensure we show on WP pages if we are supposed to
-    	if (is_page() and $sranalytics_show_on_wp_pages) {
-    	    $sranalytics_show_beacon = true;
-    	}
+        // Ensure we show on WP pages if we are supposed to
+        if (is_page() and $sranalytics_show_on_wp_pages) {
+            $sranalytics_show_beacon = true;
+        }
     }
-
     global $post;
+
     $post_id = $post->ID;
 
     // If the post isn't published yet, don't show the __reach_config
@@ -83,7 +83,73 @@ function sranalytics_insert_js()
     $tags = sranalytics_get_post_tags($post);
     $channels = sranalytics_get_post_channels($post);
     $published_date = $post->post_date_gmt;
-    $canonical_url = addslashes(get_permalink($post->ID));
+    $canonical_url = get_permalink($post->ID);
+
+
+
+    // Show the tags if we are on a tag/author/category page and we are supposed to
+    if ((is_category() or is_author() or is_tag()) and ($sranalytics_show_on_tac_pages or $sranalytics_show_everywhere)) {
+        $sranalytics_show_beacon = true;
+        $channels = "[]";
+        $authors = "[]";
+        $tags = "[]";
+
+        //handle archive-style pages. WordPress has a different pattern for retrieving each one
+
+        if (is_tag()) {
+            $tag_name = single_cat_title( '', false );
+            $tag = get_term_by('name', $tag_name, 'post_tag');
+            $tag_url = get_tag_link($tag->term_id);
+            $escaped_tag = addslashes($tag_name);
+
+            $title = "Tag:" .  $escaped_tag;
+            $tags = "['${escaped_tag}']";
+            $canonical_url = $tag_url;
+
+        } elseif (is_author()) {
+            $author_id = get_the_author_meta('ID');
+            $author_name = addslashes(get_the_author());
+
+            $title = "Author: ${author_name}";
+            $authors = "['${author_name}']";
+            $canonical_url = get_author_posts_url($author_id); 
+
+        } elseif (is_category()) {
+            $channel_name = single_cat_title( '', false );
+            $category_id = get_cat_ID($channel_page);
+            $escaped_channel_name = addslashes($channel_name);
+
+            $title = "Category: ${escaped_channel_name}";
+            $channels = "['${escaped_channel_name}']";
+            $canonical_url = get_category_link( $category_id );
+
+        } else {
+            // We should NEVER get here
+            $title = "Unkown Page Type";
+        }
+
+        // If we are on a page, then we need to add it
+        $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+        if ($paged > 1) {
+            $title = "${title} - Page ${paged}";
+        }
+    }
+
+    // Handle the homepage properly if we are supposed to fire on it
+    if ((is_home() or is_page('home')) and $sranalytics_show_everywhere) {
+        $title = "Homepage";
+        $channels = "[]";
+        $authors = "[]";
+        $tags = "[]";
+        $canonical_url = get_home_url();
+    }
+
+    // Disable the iframe loading if the settings say so
+    if ($sranalytics_disable_iframe_loading == 'true') {
+        $iframe = "iframe: false";
+    } else {
+        $iframe = "iframe: true";
+    }
 
     //force https to http if option is checked
     if($sranalytics_force_http){
@@ -91,86 +157,39 @@ function sranalytics_insert_js()
         $canonical_url = preg_replace( $pattern , "http://" , $canonical_url);
     }
 
-    // Show the tags if we are on a tag/author/category page and we are supposed to
-    if ((is_category() or is_author() or is_tag()) and ($sranalytics_show_on_tac_pages or $sranalytics_show_everywhere)) {
-	$sranalytics_show_beacon = true;
-	$channels = "[]";
-	$authors = "[]";
-	$tags = "[]";
+    //sanitize all the things
+    $canonical_url = addslashes($canonical_url);
+    $title = addslashes($title);
 
-	// Set the title
-	if (is_tag()) {
-		$tag_page = get_query_var('tag');
-		$title = "Tag: ${tag_page}";
-		$tags = "['${tag_page}']";
-        } elseif (is_author()) {
-		$author_page = get_query_var('author');
-		$title = "Author: ${author_page}";
-		$authors = "['${author_page}']";
-	} elseif (is_category()) {
-       		$channel_page = get_query_var('category');
-		$title = "Category: ${channel_page}";
-		$channels = "['${channel_page}']";
-	} else {
-		// We should NEVER get here
-		$title = "Unkown Page Type";
-        }
-
-	// If we are on a page, then we need to add it
-	$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-	if ($paged > 1) {
-		$title = "${title} - Page ${paged}";
-	}
-
-	// TODO Set the published_date
-    }
-
-// Handle the homepage properly if we are supposed to fire on it
-if ((is_home() or is_page('home')) and ($sranalytics_show_on_tac_pages or $sranalytics_show_everywhere)) {
-	$title = "Homepage";
-	$channels = "[]";
-	$authors = "[]";
-	$tags = "[]";
-}
-
-// Disable the iframe loading if the settings say so
-if ($sranalytics_disable_iframe_loading == 'true') {
-      $iframe = "iframe: false";
-} else {
-      $iframe = "iframe: true";
-}
-
-// TODO If we are using the global tag, it needs to somehow be inserted here
-
-// Get the JS ready to go
-$rv = <<< SRANALYTICS_SCRIPT_TAG
-<!-- SimpleReach Analytics Plugin Version: {$SRANALYTICS_PLUGIN_VERSION} -->
-<script type='text/javascript' id='simplereach-analytics-tag'>
-    __reach_config = {
-      pid: '{$sranalytics_pid}',
-      {$iframe},
-      title: '{$title}',
-      url: '{$canonical_url}',
-      date: '{$published_date}',
-      authors: {$authors},
-      channels: {$channels},
-      tags: {$tags}
-    };
-    (function(){
-      var s = document.createElement('script');
-      s.async = true;
-      s.type = 'text/javascript';
-      s.src = document.location.protocol + '//simple-cdn.s3.amazonaws.com/js/reach.js';
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(s);
-    })();
+    // Get the JS ready to go
+    $rv = <<< SRANALYTICS_SCRIPT_TAG
+        <!-- SimpleReach Analytics Plugin Version: {$SRANALYTICS_PLUGIN_VERSION} -->
+        <script type='text/javascript' id='simplereach-analytics-tag'>
+__reach_config = {
+    pid: '{$sranalytics_pid}',
+    {$iframe},
+    title: '{$title}',
+    url: '{$canonical_url}',
+    authors: {$authors},
+    date: '{$published_date}',
+    channels: {$channels},
+    tags: {$tags}
+};
+(function(){
+    var s = document.createElement('script');
+    s.async = true;
+    s.type = 'text/javascript';
+    s.src = document.location.protocol + '//simple-cdn.s3.amazonaws.com/js/reach.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(s);
+})();
 </script>
 SRANALYTICS_SCRIPT_TAG;
 
-    if ($sranalytics_show_beacon) {
-    	echo $rv;
-    } else {
-	return False;
-    }
+if ($sranalytics_show_beacon) {
+   echo $rv;
+} else {
+    return False;
+}
 }
 
 /**
@@ -239,8 +258,8 @@ function sranalytics_get_post_tags($post)
     foreach ($wptags as $tag) {
         $myTags[] = (is_object($tag)) ? "'".addslashes($tag->name)."'" : "'".addslashes($tag)."'";
     }
-	$tags = join(',', $myTags);
-	
+    $tags = join(',', $myTags);
+
     return "[{$tags}]";
 }
 
@@ -298,17 +317,17 @@ function sranalytics_textdomain()
  * @return None
  */
 function current_page_url() {
-	$pageURL = 'http';
-	if( isset($_SERVER["HTTPS"]) ) {
-		if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
-	}
-	$pageURL .= "://";
-	if ($_SERVER["SERVER_PORT"] != "80") {
-		$pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
-	} else {
-		$pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
-	}
-	return $pageURL;
+    $pageURL = 'http';
+    if( isset($_SERVER["HTTPS"]) ) {
+        if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+    }
+    $pageURL .= "://";
+    if ($_SERVER["SERVER_PORT"] != "80") {
+        $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+    } else {
+        $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+    }
+    return $pageURL;
 }
 
 // Determine when specific methods are supposed to fire
