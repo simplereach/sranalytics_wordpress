@@ -8,7 +8,7 @@
  Author URI: https://www.simplereach.com
  */
 
-define('SRANALYTICS_PLUGIN_VERSION', '0.0.7');
+define('SRANALYTICS_PLUGIN_VERSION', '0.0.8');
 define('SRANALYTICS_PLUGIN_URL', PLugin_dir_url(__FILE__));
 define('SRANALYTICS_PLUGIN_SUPPORT_EMAIL', 'support@simplereach.com');
 
@@ -33,6 +33,9 @@ function sranalytics_insert_js()
     $sranalytics_show_on_wp_pages_string = get_option('sranalytics_show_on_wp_pages');
     $sranalytics_show_on_wp_pages = ($sranalytics_show_on_wp_pages_string === 'true');
 
+    $sranalytics_show_on_attachment_pages_string = get_option('sranalytics_show_on_attachment_pages');
+    $sranalytics_show_on_attachment_pages = ($sranalytics_show_on_attachment_pages_string === 'true');
+
     $sranalytics_show_everywhere_string = get_option('sranalytics_show_everywhere');
     $sranalytics_show_everywhere = ($sranalytics_show_everywhere_string === 'true');
 
@@ -51,13 +54,13 @@ function sranalytics_insert_js()
     if ($sranalytics_show_everywhere) {
     	$sranalytics_show_beacon = true;
     } else {
-    	// Skip attachment pages
-    	if (is_attachment()) {
-    	    return False;
-    	}
+
+      if (is_attachment() and $sranalytics_show_on_attachment_pages) {
+        $sranalytics_show_beacon = true;
+      }
 
     	// Ensure we show on post pages
-    	if (is_single() or is_attachment()) {
+    	if (is_single()) {
     	    $sranalytics_show_beacon = true;
     	}
 
@@ -71,10 +74,10 @@ function sranalytics_insert_js()
     $post_id = $post->ID;
 
     // If the post isn't published yet, don't show the __reach_config
-    if ($post->post_status != 'publish') {
+    // attachments don't have published status though so always show for them.
+    if ($post->post_status != 'publish' and !is_attachment()) {
         return False;
     }
-
     $SRANALYTICS_PLUGIN_VERSION = SRANALYTICS_PLUGIN_VERSION;
 
     // Prep the variables
@@ -152,9 +155,9 @@ $rv = <<< SRANALYTICS_SCRIPT_TAG
       title: '{$title}',
       url: '{$canonical_url}',
       date: '{$published_date}',
-      authors: {$authors},
       channels: {$channels},
-      tags: {$tags}
+      tags: {$tags},
+      authors: {$authors}
     };
     (function(){
       var s = document.createElement('script');

@@ -12,25 +12,31 @@
         $sranalytics_show_on_tac_pages = (!empty($_POST['sranalytics_show_on_tac_pages'])) ? $_POST['sranalytics_show_on_tac_pages'] : '';
         if (update_option('sranalytics_show_on_tac_pages', $sranalytics_show_on_tac_pages)) {
         	$message = 'Settings updated';
-	}
+        }
 
         $sranalytics_show_on_wp_pages = (!empty($_POST['sranalytics_show_on_wp_pages'])) ? $_POST['sranalytics_show_on_wp_pages'] : '';
         if (update_option('sranalytics_show_on_wp_pages', $sranalytics_show_on_wp_pages)) {
-        	$message = 'Settings updated';
-	}
+          $message = 'Settings updated';
+        }
+        $sranalytics_show_on_attachment_pages = (!empty($_POST['sranalytics_show_on_attachment_pages'])) ? $_POST['sranalytics_show_on_attachment_pages'] : '';
+        if (update_option('sranalytics_show_on_attachment_pages', $sranalytics_show_on_attachment_pages)) {
+          $message = 'Settings updated';
+        }
+
 
         $sranalytics_show_everywhere = (!empty($_POST['sranalytics_show_everywhere'])) ? $_POST['sranalytics_show_everywhere'] : '';
         if (update_option('sranalytics_show_everywhere', $sranalytics_show_everywhere)) {
         	$message = 'Settings updated';
-	}
+	      }
         $sranalytics_force_http = (!empty($_POST['sranalytics_force_http'])) ? $_POST['sranalytics_force_http'] : '';
         if (update_option('sranalytics_force_http', $sranalytics_force_http)) {
         	$message = 'Settings updated';
-	}
+	      }
+
         $sranalytics_disable_iframe_loading = (!empty($_POST['sranalytics_disable_iframe_loading'])) ? $_POST['sranalytics_disable_iframe_loading'] : '';
         if (update_option('sranalytics_disable_iframe_loading', $sranalytics_disable_iframe_loading)) {
         	$message = 'Settings updated';
-	}
+	      }
 
     }
     if ($message) {
@@ -56,6 +62,12 @@
     $sranalytics_show_on_wp_pages = ($sranalytics_show_on_wp_pages_string === 'true');
     if (empty($sranalytics_show_on_wp_pages)) {
     	$sranalytics_show_on_wp_pages = false;
+    }
+
+    $sranalytics_show_on_attachment_pages_string = get_option('sranalytics_show_on_attachment_pages');
+    $sranalytics_show_on_attachment_pages = ($sranalytics_show_on_attachment_pages_string === 'true');
+    if (empty($sranalytics_show_on_attachment_pages)) {
+    	$sranalytics_show_on_attachment_pages = false;
     }
 
     $sranalytics_force_http_string = get_option('sranalytics_force_http');
@@ -125,14 +137,20 @@
           </li>
 
           <li>
+              <input type="checkbox" id='sranalytics_show_on_attachment_pages' name="sranalytics_show_on_attachment_pages" value="true" <?php if ($sranalytics_show_on_attachment_pages) { print 'CHECKED=CHECKED'; } ?> />
+              <label for='sranalytics_show_on_attachment_pages'>Track attachment pages (these are the pages created in the 'media' link on the left sidebar)</label>
+          </li>
+
+          <li>
               <input type="checkbox" id='sranalytics_show_on_tac_pages' name="sranalytics_show_on_tac_pages" value="true" <?php if ($sranalytics_show_on_tac_pages) { print 'CHECKED=CHECKED'; } ?> />
               <label for='sranalytics_show_on_tac_pages'>Track author, category, and tag pages</label>
           </li>
 
           <li>
               <input type="checkbox" id='sranalytics_show_everywhere' name="sranalytics_show_everywhere" value="true" <?php if ($sranalytics_show_everywhere) { print 'CHECKED=CHECKED'; } ?> />
-              <label for='sranalytics_show_everywhere'>Track everything, including the home page (includes WordPress, author, category, tag, and search results pages)</label>
+              <label for='sranalytics_show_everywhere'>Track everything, including the home page (includes WordPress, author, category, tag, attachment and search results pages)</label>
           </li>
+
           <li>
               <input type="checkbox" id='sranalytics_force_http' name="sranalytics_force_http" value="true" <?php if ($sranalytics_force_http) { print 'CHECKED=CHECKED'; } ?> />
               <label for='sranalytics_force_http'>Send urls as HTTP. If your site uses a combination of both HTTP and HTTPS, enable this option.</label>
