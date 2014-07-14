@@ -30,6 +30,9 @@ function sranalytics_insert_js()
     $sranalytics_show_on_tac_pages_string = get_option('sranalytics_show_on_tac_pages');
     $sranalytics_show_on_tac_pages = ($sranalytics_show_on_tac_pages_string === 'true');
 
+    $sranalytics_show_on_attachments_string = get_option('sranalytics_show_on_attachments');
+    $sranalytics_show_on_attachments = ($sranalytics_show_on_attachments_string === 'true');
+
     $sranalytics_show_on_wp_pages_string = get_option('sranalytics_show_on_wp_pages');
     $sranalytics_show_on_wp_pages = ($sranalytics_show_on_wp_pages_string === 'true');
 
@@ -52,14 +55,18 @@ function sranalytics_insert_js()
     	$sranalytics_show_beacon = true;
     } else {
     	// Skip attachment pages
-    	if (is_attachment()) {
-    	    return False;
-    	}
+        if (is_attachment()) { 
+		if ($sranalytics_show_on_attachments) {
+		    $sranalytics_show_beacon = true;
+		} else {
+		    return False;
+		}
+	}
 
     	// Ensure we show on post pages
-    	if (is_single() or is_attachment()) {
-    	    $sranalytics_show_beacon = true;
-    	}
+        if (is_single()) {
+            $sranalytics_show_beacon = true;
+        }
 
     	// Ensure we show on WP pages if we are supposed to
     	if (is_page() and $sranalytics_show_on_wp_pages) {
@@ -71,7 +78,8 @@ function sranalytics_insert_js()
     $post_id = $post->ID;
 
     // If the post isn't published yet, don't show the __reach_config
-    if ($post->post_status != 'publish') {
+    // get_post_status will get parent's status if it's an attachment page
+    if (get_post_status($post->ID) != 'publish') {
         return False;
     }
 

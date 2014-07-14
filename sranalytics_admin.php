@@ -19,6 +19,11 @@
         	$message = 'Settings updated';
 	}
 
+        $sranalytics_show_on_attachments = (!empty($_POST['sranalytics_show_on_attachments'])) ? $_POST['sranalytics_show_on_attachments'] : '';
+        if (update_option('sranalytics_show_on_attachments', $sranalytics_show_on_attachments)) {
+            $message = 'Settings updated';
+	}
+
         $sranalytics_show_everywhere = (!empty($_POST['sranalytics_show_everywhere'])) ? $_POST['sranalytics_show_everywhere'] : '';
         if (update_option('sranalytics_show_everywhere', $sranalytics_show_everywhere)) {
         	$message = 'Settings updated';
@@ -56,6 +61,12 @@
     $sranalytics_show_on_wp_pages = ($sranalytics_show_on_wp_pages_string === 'true');
     if (empty($sranalytics_show_on_wp_pages)) {
     	$sranalytics_show_on_wp_pages = false;
+    }
+
+    $sranalytics_show_on_attachments_string = get_option('sranalytics_show_on_attachments');
+    $sranalytics_show_on_attachments = ($sranalytics_show_on_attachments_string === 'true');
+    if (empty($sranalytics_show_on_attachments)) {
+        $sranalytics_show_on_attachments = false;
     }
 
     $sranalytics_force_http_string = get_option('sranalytics_force_http');
@@ -127,6 +138,11 @@
           <li>
               <input type="checkbox" id='sranalytics_show_on_tac_pages' name="sranalytics_show_on_tac_pages" value="true" <?php if ($sranalytics_show_on_tac_pages) { print 'CHECKED=CHECKED'; } ?> />
               <label for='sranalytics_show_on_tac_pages'>Track author, category, and tag pages</label>
+          </li>
+
+          <li>
+              <input type="checkbox" id='sranalytics_show_on_attachments' name="sranalytics_show_on_attachments" value="true" <?php if ($sranalytics_show_on_attachments) { print 'CHECKED=CHECKED'; } ?> />
+              <label for='sranalytics_show_on_attachments'>Track attachment pages</label>
           </li>
 
           <li>
