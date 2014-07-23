@@ -1,11 +1,11 @@
 === SimpleReach Analytics ===
 Tags: articles, content, headlines, links, pageviews, plugin, social, simplereach, analytics, traffic, posts, best, readers, engagement, simple, reach, native, advertising
-Contributors: elubow
+Contributors: elubow, andremalan
 Plugin Name: SimpleReach Analytics
 Plugin URI: https://github.com/simplereach/sranalytics_wordpress
 Requires at least: 2.7
-Tested up to: 3.9.0
-Stable tag: 0.0.8
+Tested up to: 4.0.0-beta-2
+Stable tag: 0.0.9
 
 SimpleReach Analytics finds trending articles and gives publishers deep insights into their social traffic.
 
@@ -20,6 +20,9 @@ SimpleReach Analytics finds trending articles and gives publishers deep insights
 
 == Changelog ==
 
+= 0.0.9 =
+
+* Refactoring code to match WordPress standards
 = 0.0.8 =
 * Better management of category, author, tag and home pages
 * Added ability for to track attachment pages
