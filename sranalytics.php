@@ -1,7 +1,7 @@
 <?php
 /**
  Plugin Name: SimpleReach Analytics
- Plugin URI: https://www.simplereach.com
+ Plugin URI: http://www.simplereach.com/docs/wordpress-plugin/
  Description: After installation, you must click '<a href='options-general.php?page=SimpleReach-Analytics'>Settings &rarr; SimpleReach Analytics</a>' to turn on the Analytics.
  Version: 0.0.9
  Author: SimpleReach
