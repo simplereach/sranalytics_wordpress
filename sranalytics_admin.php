@@ -112,7 +112,7 @@ $sranalytics_disable_iframe_loading = get_option( 'sranalytics_disable_iframe_lo
 
 					<li>
 							<input type="checkbox" id='sranalytics_show_everywhere' name="sranalytics_show_everywhere" value="true" <?php if ( $sranalytics_show_everywhere ) { print 'CHECKED=CHECKED'; } ?> />
-							<label for='sranalytics_show_everywhere'><?php _e( 'Track everything, including the home page (includes WordPress, author, category, tag, attachment and search results pages)', 'sranalytics' ); ?></label>
+							<label for='sranalytics_show_everywhere'><?php _e( 'Track everything, including the home page (includes WordPress, author, category, tag, attachment, and search results pages)', 'sranalytics' ); ?></label>
 					</li>
 
 					<li>
