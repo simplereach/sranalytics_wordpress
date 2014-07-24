@@ -103,7 +103,7 @@ function sranalytics_insert_js() {
 			$tag_url = get_tag_link($tag->term_id);
 
 			$title = "Tag: ${tag_name}";
-			$tags[] = array( $tag_name );
+			$tags[] = $tag_name;
 			$canonical_url = $tag_url;
 
 		} elseif ( is_author() ) {
