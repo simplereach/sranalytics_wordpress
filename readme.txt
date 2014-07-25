@@ -1,24 +1,24 @@
 === SimpleReach Analytics ===
 Tags: articles, content, headlines, links, pageviews, plugin, social, simplereach, analytics, traffic, posts, best, readers, engagement, simple, reach, native, advertising
-Contributors: elubow
+Contributors: SimpleReach
 Plugin Name: SimpleReach Analytics
 Plugin URI: https://github.com/simplereach/sranalytics_wordpress
-Requires at least: 2.7
-Tested up to: 3.9.0
-Stable tag: 0.0.8
+Requires at least: 3.0
+Tested up to: 4.0.0-beta-2
+Stable tag: 0.1.0
 
 SimpleReach Analytics finds trending articles and gives publishers deep insights into their social traffic.
 
 == Installation ==
-1. Go to www.simplereach.com and register for an analytics account.
-2. Get the PID (Publisher ID) for your domain.
-3. Click Plugins -> Add New -> Upload
-4. After installation, go to _Settings -> SimpleReach Analytics_ in your plugins list and click _Activate_.
-5. Enter your PID (Publisher ID) and click _Save_.
-6. Pick which pages you want SimpleReach to track.
-7. You're finished!
+1. Contact SimpleReach to get the Publisher ID (PID) for your domain.
+2. Go to _Plugins -> SimpleReach Analytics_ in your plugins list and click _Activate_.
+3. Go to _Settings -> SimpleReach Analytics_ and enter your PID into the first field. Click _Save_.
+4. Customize and update the iFrame and advanced settings if applicable to your site.
 
 == Changelog ==
+
+= 0.1.0 =
+* Refactoring code to match WordPress VIP standards
 
 = 0.0.8 =
 * Better management of category, author, tag and home pages
