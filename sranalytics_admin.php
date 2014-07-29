@@ -49,7 +49,7 @@ $sranalytics_disable_iframe_loading = get_option( 'sranalytics_disable_iframe_lo
 	<h2><?php _e( 'SimpleReach Analytics', 'sranalytics' ); ?></h2>
 </div>
 
-<form name="sranalytics_form" method="post" action="<?php print admin_url( 'options-general.php?page=SimpleReach-Analytics' ); ?>">
+<form name="sranalytics_form" method="post" action="<?php echo esc_url( admin_url( 'options-general.php?page=SimpleReach-Analytics' ) ); ?>">
 
 <div id='poststuff' class='wrap'>
 <div id='post-body' class='metabox-holder colums-2'>
@@ -82,7 +82,7 @@ $sranalytics_disable_iframe_loading = get_option( 'sranalytics_disable_iframe_lo
 		<div class='inside'>
 			<ul>
 					<li>
-							<input type="checkbox" id='sranalytics_disable_iframe_loading' name="sranalytics_disable_iframe_loading" value="true" <?php if ( $sranalytics_disable_iframe_loading ) { print 'CHECKED=CHECKED'; } ?> />
+							<input type="checkbox" id='sranalytics_disable_iframe_loading' name="sranalytics_disable_iframe_loading" value="true"  <?php checked( $sranalytics_disable_iframe_loading, true ); ?>  />
 							<label for='sranalytics_disable_iframe_loading'><?php _e( 'Disable iFrame loading of the SimpleReach code', 'sranalytics' ); ?> (<span style='color:red;font-size:10px;'><strong>WARNING</strong>: disabling will make your analytics less accurate</span>)</label>
 					</li>
 					<li><input class='button-primary' type="submit" name="Submit" value="<?php _e( 'Save', 'sranalytics' ); ?>" /></li>
@@ -96,27 +96,27 @@ $sranalytics_disable_iframe_loading = get_option( 'sranalytics_disable_iframe_lo
 			<p><?php _e( "WordPress posts are tracked by default. If you'd like to track additional parts of your site, please use the settings below.", 'sranalytics' ); ?></p>
 			<ul>
 					<li>
-							<input type="checkbox" id='sranalytics_show_on_wp_pages' name="sranalytics_show_on_wp_pages" value="true" <?php if ( $sranalytics_show_on_wp_pages ) { print 'CHECKED=CHECKED'; } ?> />
+							<input type="checkbox" id='sranalytics_show_on_wp_pages' name="sranalytics_show_on_wp_pages" value="true" <?php checked( $sranalytics_show_on_wp_pages, true ); ?> />
 							<label for='sranalytics_show_on_wp_pages'><?php _e( "Track pages (these are the pages you create from the 'Pages' link in the left sidebar)", 'sranalytics' ); ?></label>
 					</li>
 
 					<li>
-							<input type="checkbox" id='sranalytics_show_on_attachment_pages' name="sranalytics_show_on_attachment_pages" value="true" <?php if ( $sranalytics_show_on_attachment_pages ) { print 'CHECKED=CHECKED'; } ?> />
+							<input type="checkbox" id='sranalytics_show_on_attachment_pages' name="sranalytics_show_on_attachment_pages" value="true" <?php checked( $sranalytics_show_on_attachment_pages, true ); ?>  />
 							<label for='sranalytics_show_on_attachment_pages'><?php _e( "Track attachment pages (these are the pages created in the 'media' link on the left sidebar)", 'sranalytics' ); ?></label>
 					</li>
 
 					<li>
-							<input type="checkbox" id='sranalytics_show_on_tac_pages' name="sranalytics_show_on_tac_pages" value="true" <?php if ( $sranalytics_show_on_tac_pages ) { print 'CHECKED=CHECKED'; } ?> />
+							<input type="checkbox" id='sranalytics_show_on_tac_pages' name="sranalytics_show_on_tac_pages" value="true" <?php checked( $sranalytics_show_on_tac_pages, true ); ?>  />
 							<label for='sranalytics_show_on_tac_pages'><?php _e( 'Track author, category, and tag pages', 'sranalytics' ); ?></label>
 					</li>
 
 					<li>
-							<input type="checkbox" id='sranalytics_show_everywhere' name="sranalytics_show_everywhere" value="true" <?php if ( $sranalytics_show_everywhere ) { print 'CHECKED=CHECKED'; } ?> />
+							<input type="checkbox" id='sranalytics_show_everywhere' name="sranalytics_show_everywhere" value="true"  <?php checked( $sranalytics_show_everywhere, true ); ?>  />
 							<label for='sranalytics_show_everywhere'><?php _e( 'Track everything, including the home page (includes WordPress, author, category, tag, attachment, and search results pages)', 'sranalytics' ); ?></label>
 					</li>
 
 					<li>
-							<input type="checkbox" id='sranalytics_force_http' name="sranalytics_force_http" value="true" <?php if ( $sranalytics_force_http ) { print 'CHECKED=CHECKED'; } ?> />
+							<input type="checkbox" id='sranalytics_force_http' name="sranalytics_force_http" value="true"  <?php checked( $sranalytics_force_http, true ); ?>  />
 							<label for='sranalytics_force_http'><?php _e( 'Send urls as HTTP. If your site uses a combination of both HTTP and HTTPS, enable this option.', 'sranalytics' ); ?></label>
 					</li>
 					<li><input class='button-primary' type="submit" name="Submit" value="<?php _e( 'Save', 'sranalytics' ); ?>" /></li>

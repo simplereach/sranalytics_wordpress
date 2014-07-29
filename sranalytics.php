@@ -84,8 +84,8 @@ function sranalytics_insert_js() {
 	// default case of a regular post
 	$title = $post->post_title;
 	$authors = array( get_author_name( $post->post_author ) );
-	$tags = sranalytics_get_post_tags ($post );
-	$channels = sranalytics_get_post_channels( $post );
+	$tags = wp_get_post_tags( $post->ID, array( 'fields' => 'names' ) );
+	$channels = wp_get_post_categories( $post->ID, array( 'fields' => 'slugs' ) );
 	$published_date = $post->post_date_gmt;
 	$canonical_url = get_permalink( $post->ID );
 
@@ -157,9 +157,9 @@ function sranalytics_insert_js() {
 		'title' => esc_js( $title ),
 		'url' => esc_js( $canonical_url ),
 		'date' => esc_js( $published_date ),
-		'channels' => sranalytics_array_esc_js( $channels ),
-		'tags' =>  sranalytics_array_esc_js( $tags ),
-		'authors' =>	sranalytics_array_esc_js( $authors ),
+		'channels' => array_map( 'esc_js', $channels ),
+		'tags' => array_map( 'esc_js', $tags ),
+		'authors' => array_map( 'esc_js',  $authors ),
 	);
 
 	// Get the JS ready to go
@@ -171,53 +171,6 @@ function sranalytics_insert_js() {
 		return false;
 	}
 }
-
-/**
- * JS escape all element in an array
- *
- * @param Array $the_array Array that should have all elements escaped
- * @return Array an array with all elements js escaped
- */
-function sranalytics_array_esc_js( $the_array ) {
-	$return_array = array();
-	foreach ( $the_array as $element ) {
-		$return_array[] = esc_js( $element );
-	}
-	return $return_array;
-}
-
-/**
- * Get the post categories and return them in stringified array form
- *
- * @author Eric Lubow <elubow@simplereach.com>
- * @param Object $post Wordpress Post
- * @return Array $array the array of categories
- */
-function sranalytics_get_post_channels( $post ) {
-	$post_categories = wp_get_post_categories( $post->ID );
-	$myCats = array();
-	foreach ($post_categories as $c) {
-		$myCats[] = get_category($c)->slug;
-	}
-	return $myCats;
-}
-
-
-/**
- * Return the tags for the post
- *
- * @param Object $post Post object being shown on the page
- * @return Array Tags of the post
- */
-function sranalytics_get_post_tags( $post ) {
-	$wptags = wp_get_post_tags( $post->ID );
-	$myTags = array();
-	foreach ( $wptags as $tag ) {
-		$myTags[] = $tag->name;
-	}
-	return $myTags;
-}
-
 /**
  * Add the SimpleReach admin section
  */
