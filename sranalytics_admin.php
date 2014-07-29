@@ -128,7 +128,7 @@ $sranalytics_disable_iframe_loading = get_option( 'sranalytics_disable_iframe_lo
 <div id='postbox-container-1' class='postbox-container'>
 <div class='meta-box-sortables ui-sortable'>
 	<div class='postbox'>
-		<h3 class='hndle'>Support</h3>
+		<h3 class='hndle'><?php _e( 'Support', 'sranalytics' ); ?></h3>
 		<div class='inside'>
 			<p>
 			<a href='mailto:support@simplereach.com'><?php _e( 'Questions? Comments? We can be contacted via SimpleReach Support', 'sranalytics' ); ?></a>.

@@ -2,6 +2,7 @@
 /**
  Plugin Name: SimpleReach Analytics
  Plugin URI: http://www.simplereach.com/docs/wordpress-plugin/
+ Text Domain: sranalytics
  Description: After installation, you must click '<a href='options-general.php?page=SimpleReach-Analytics'>Settings &rarr; SimpleReach Analytics</a>' to turn on the Analytics.
  Version: 0.1.0
  Author: SimpleReach
@@ -191,13 +192,9 @@ function sranalytics_admin_actions() {
 function sranalytics_textdomain() {
 	$locale				 = apply_filters( 'sranalytics_locale', get_locale() );
 	$mofile				 = sprintf( 'sranalytics-%s.mo', $locale );
-	$mofile_local  = basename(dirname(__FILE__)) . '/lang/' . $mofile;
+	$mofile_local  = plugin_dir_path( __FILE__ ) . 'languages/' . $mofile;
 
-	if ( file_exists( $mofile_local ) ) {
-		return load_textdomain( 'sranalytics', $mofile_local );
-	} else {
-		return false;
-	}
+  return load_textdomain( 'sranalytics', $mofile_local );
 }
 
 // Determine when specific methods are supposed to fire
