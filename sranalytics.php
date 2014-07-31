@@ -4,7 +4,7 @@
  Plugin URI: http://www.simplereach.com/docs/wordpress-plugin/
  Text Domain: sranalytics
  Description: After installation, you must click '<a href='options-general.php?page=SimpleReach-Analytics'>Settings &rarr; SimpleReach Analytics</a>' to turn on the Analytics.
- Version: 0.1.1
+ Version: 0.1.2
  Author: SimpleReach
  Author URI: https://www.simplereach.com
  */
@@ -26,7 +26,7 @@
 		Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-define( 'SRANALYTICS_PLUGIN_VERSION', '0.1.1' );
+define( 'SRANALYTICS_PLUGIN_VERSION', '0.1.2' );
 
 /**
  * Insert analytics code onto the post page
