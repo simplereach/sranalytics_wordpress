@@ -26,12 +26,15 @@
 		Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-define( 'SRANALYTICS_PLUGIN_VERSION', '0.1.2' );
+define( 'SRANALYTICS_PLUGIN_VERSION', '0.1.3' );
 
 /**
  * Insert analytics code onto the post page
  */
 function sranalytics_insert_js() {
+
+	global $post;
+
 	// Do not show SimpleReach tags by default
 	$sranalytics_show_beacon = false;
 
@@ -45,7 +48,7 @@ function sranalytics_insert_js() {
 	$sranalytics_disable_iframe_loading = get_option( 'sranalytics_disable_iframe_loading' );
 
 	// Try and check the validity of the PID
-	if ( empty( $sranalytics_pid) || strlen( $sranalytics_pid ) != 24 ) {
+	if ( empty( $sranalytics_pid) || 24 != strlen( $sranalytics_pid ) ) {
 		return False;
 	}
 
@@ -72,13 +75,12 @@ function sranalytics_insert_js() {
 	if ( is_page() && $sranalytics_show_on_wp_pages ) {
 		$sranalytics_show_beacon = true;
 	}
-	global $post;
 
 	$post_id = $post->ID;
 
 	// If the post isn't published yet, don't show the __reach_config
 	// attachments don't have published status though so always show for them.
-	if ( $post->post_status != 'publish' && !is_attachment() ) {
+	if ( 'publish' != $post->post_status && !is_attachment() ) {
 		return False;
 	}
 
@@ -100,7 +102,7 @@ function sranalytics_insert_js() {
 		//handle archive-style pages. WordPress has a different pattern for retrieving each one
 		if ( is_tag() ) {
 			$tag_name = single_cat_title( '', false );
-			$tag = get_term_by( 'name', $tag_name, 'post_tag' );
+			$tag = wpcom_vip_get_term_by( 'name', $tag_name, 'post_tag' );
 			$tag_url = get_tag_link($tag->term_id);
 
 			$title = "Tag: ${tag_name}";
@@ -183,7 +185,7 @@ function sranalytics_load_admin() {
  * Add the SimpleReach admin options to the Settings Menu
  */
 function sranalytics_admin_actions() {
-	add_options_page("SimpleReach Analytics", "SimpleReach Analytics", 1, "SimpleReach-Analytics", "sranalytics_load_admin");
+	add_options_page("SimpleReach Analytics", "SimpleReach Analytics", "manage_options", "SimpleReach-Analytics", "sranalytics_load_admin");
 }
 
 /**
@@ -198,6 +200,6 @@ function sranalytics_textdomain() {
 }
 
 // Determine when specific methods are supposed to fire
-add_action( 'wp_head', 'sranalytics_insert_js', 1 );
+add_action( 'wp_head', 'sranalytics_insert_js', 5 );
 add_action( 'admin_menu','sranalytics_admin_actions' );
 add_action( 'plugins_loaded', 'sranalytics_textdomain' );
