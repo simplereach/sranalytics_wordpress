@@ -102,7 +102,11 @@ function sranalytics_insert_js() {
 		//handle archive-style pages. WordPress has a different pattern for retrieving each one
 		if ( is_tag() ) {
 			$tag_name = single_cat_title( '', false );
-			$tag = wpcom_vip_get_term_by( 'name', $tag_name, 'post_tag' );
+			if ( function_exists( 'wpcom_vip_get_term_by' ) ) {
+				$tag = wpcom_vip_get_term_by( 'name', $tag_name, 'post_tag' );
+			 } else {
+				$tag = get_term_by( 'name', $tag_name, 'post_tag' );
+			}
 			$tag_url = get_tag_link($tag->term_id);
 
 			$title = "Tag: ${tag_name}";
