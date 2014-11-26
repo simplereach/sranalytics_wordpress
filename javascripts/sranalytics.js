@@ -2,7 +2,7 @@
   __sranalyticsPluginVersion = sranalytics.version;
   __reach_config = {
     pid: sranalytics.pid,
-    iframe: sranalytics.iframe === '0' ? false : true,
+    iframe: sranalytics.iframe === '0' ? true : false,
     title: sranalytics.title,
     url: sranalytics.url,
     date: sranalytics.date,
