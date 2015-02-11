@@ -89,7 +89,7 @@ function sranalytics_insert_js() {
 	$authors = array( get_author_name( $post->post_author ) );
 	$tags = wp_get_post_tags( $post->ID, array( 'fields' => 'names' ) );
 	$channels = wp_get_post_categories( $post->ID, array( 'fields' => 'slugs' ) );
-	$published_date = $post->post_date_gmt;
+	$published_date = $post->post_date;
 	$canonical_url = get_permalink( $post->ID );
 
 	// Show the tags if we are on a tag/author/category page and we are supposed to
