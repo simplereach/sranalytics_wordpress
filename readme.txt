@@ -13,9 +13,11 @@ SimpleReach Analytics finds trending articles and gives publishers deep insights
 1. Contact SimpleReach to get the Publisher ID (PID) for your domain.
 2. Go to _Plugins -> SimpleReach Analytics_ in your plugins list and click _Activate_.
 3. Go to _Settings -> SimpleReach Analytics_ and enter your PID into the first field. Click _Save_.
-4. Customize and update the iFrame and advanced settings if applicable to your site.
 
 == Changelog ==
+
+= 0.1.5 =
+* Remove deprecated author function and iframe feature
 
 = 0.1.4 =
 * Add filters for values: title, url, date, channels, tags, and authors

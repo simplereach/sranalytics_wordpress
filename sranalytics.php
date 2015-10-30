@@ -45,7 +45,6 @@ function sranalytics_insert_js() {
 	$sranalytics_show_on_attachment_pages = get_option( 'sranalytics_show_on_attachment_pages' );
 	$sranalytics_show_everywhere = get_option( 'sranalytics_show_everywhere' );
 	$sranalytics_force_http = get_option( 'sranalytics_force_http' );
-	$sranalytics_disable_iframe_loading = get_option( 'sranalytics_disable_iframe_loading' );
 
 	// Try and check the validity of the PID
 	if ( empty( $sranalytics_pid) || 24 != strlen( $sranalytics_pid ) ) {
@@ -86,7 +85,7 @@ function sranalytics_insert_js() {
 
 	// default case of a regular post
 	$title = $post->post_title;
-	$authors = array( get_author_name( $post->post_author ) );
+	$authors = array( get_the_author_meta('user_nicename', $post->post_author ) );
 	$tags = wp_get_post_tags( $post->ID, array( 'fields' => 'names' ) );
 	$channels = wp_get_post_categories( $post->ID, array( 'fields' => 'slugs' ) );
 	$published_date = $post->post_date_gmt;
@@ -160,7 +159,6 @@ function sranalytics_insert_js() {
 	$javascript_array = array(
 		'version' => SRANALYTICS_PLUGIN_VERSION,
 		'pid' => esc_js( $sranalytics_pid ),
-		'iframe' => esc_js( $sranalytics_disable_iframe_loading ),
 		'title' => esc_js( apply_filters( 'sranalytics_title', $title ) ),
 		'url' => esc_js( apply_filters( 'sranalytics_url', $canonical_url ) ),
 		'date' => esc_js( apply_filters( 'sranalytics_date', $published_date ) ),
