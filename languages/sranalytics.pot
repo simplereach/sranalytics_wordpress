@@ -40,14 +40,6 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: sranalytics_admin.php:81
-msgid "iFrame Settings"
-msgstr ""
-
-#: sranalytics_admin.php:86
-msgid "Disable iFrame loading of the SimpleReach code"
-msgstr ""
-
 #: sranalytics_admin.php:94
 msgid "Advanced Tracking Settings"
 msgstr ""

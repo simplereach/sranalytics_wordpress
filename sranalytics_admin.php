@@ -5,8 +5,7 @@ $sranalytics_boolean_settings = array(
 	'sranalytics_show_on_wp_pages',
 	'sranalytics_show_on_attachment_pages',
 	'sranalytics_show_everywhere',
-	'sranalytics_force_http',
-	'sranalytics_disable_iframe_loading',
+	'sranalytics_force_http'
 );
 $message = '';
 if ( !empty( $_POST[ 'sranalytics_submitted' ] ) && current_user_can( 'manage_options' ) ) {
@@ -43,7 +42,6 @@ $sranalytics_show_everywhere = get_option( 'sranalytics_show_everywhere' );
 $sranalytics_show_on_wp_pages = get_option( 'sranalytics_show_on_wp_pages' );
 $sranalytics_show_on_attachment_pages = get_option( 'sranalytics_show_on_attachment_pages' );
 $sranalytics_force_http = get_option( 'sranalytics_force_http' );
-$sranalytics_disable_iframe_loading = get_option( 'sranalytics_disable_iframe_loading' );
 ?>
 
 <div class='overview'>
@@ -73,19 +71,6 @@ $sranalytics_disable_iframe_loading = get_option( 'sranalytics_disable_iframe_lo
 											</span>
 									<?php } ?>
 							</div>
-					</li>
-					<li><input class='button-primary' type="submit" name="Submit" value="<?php esc_attr_e( 'Save', 'sranalytics' ); ?>" /></li>
-			</ul>
-		</div>
-	</div>
-
-	<div class='postbox'>
-		<h3 class='hndle'><span><?php esc_html_e( 'iFrame Settings', 'sranalytics' ); ?></span></h3>
-		<div class='inside'>
-			<ul>
-					<li>
-							<input type="checkbox" id='sranalytics_disable_iframe_loading' name="sranalytics_disable_iframe_loading" value="true"  <?php checked( $sranalytics_disable_iframe_loading, true ); ?>  />
-							<label for='sranalytics_disable_iframe_loading'><?php esc_html_e( 'Disable iFrame loading of the SimpleReach code', 'sranalytics' ); ?> (<span style='color:red;font-size:10px;'><strong>WARNING</strong>: disabling will make your analytics less accurate</span>)</label>
 					</li>
 					<li><input class='button-primary' type="submit" name="Submit" value="<?php esc_attr_e( 'Save', 'sranalytics' ); ?>" /></li>
 			</ul>
