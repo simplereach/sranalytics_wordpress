@@ -5,7 +5,8 @@ $sranalytics_boolean_settings = array(
 	'sranalytics_show_on_wp_pages',
 	'sranalytics_show_on_attachment_pages',
 	'sranalytics_show_everywhere',
-	'sranalytics_force_http'
+	'sranalytics_force_http',
+	'sranalytics_manual_scroll_depth'
 );
 $message = '';
 if ( !empty( $_POST[ 'sranalytics_submitted' ] ) && current_user_can( 'manage_options' ) ) {
@@ -42,6 +43,7 @@ $sranalytics_show_everywhere = get_option( 'sranalytics_show_everywhere' );
 $sranalytics_show_on_wp_pages = get_option( 'sranalytics_show_on_wp_pages' );
 $sranalytics_show_on_attachment_pages = get_option( 'sranalytics_show_on_attachment_pages' );
 $sranalytics_force_http = get_option( 'sranalytics_force_http' );
+$sranalytics_manual_scroll_depth = get_option( 'sranalytics_manual_scroll_depth' );
 ?>
 
 <div class='overview'>
@@ -105,6 +107,11 @@ $sranalytics_force_http = get_option( 'sranalytics_force_http' );
 					<li>
 							<input type="checkbox" id='sranalytics_force_http' name="sranalytics_force_http" value="true"  <?php checked( $sranalytics_force_http, true ); ?>  />
 							<label for='sranalytics_force_http'><?php esc_html_e( 'Send urls as HTTP. If your site uses a combination of both HTTP and HTTPS, enable this option.', 'sranalytics' ); ?></label>
+					</li>
+
+					<li>
+							<input type="checkbox" id='sranalytics_manual_scroll_depth' name="sranalytics_manual_scroll_depth" value="true"  <?php checked( $sranalytics_manual_scroll_depth, true ); ?>  />
+							<label for='sranalytics_manual_scroll_depth'><?php esc_html_e( 'Make scroll depth tracking manual. This is reccomended for infinite scroll sites.', 'sranalytics' ); ?></label>
 					</li>
 					<li><input class='button-primary' type="submit" name="Submit" value="<?php esc_html_e( 'Save', 'sranalytics' ); ?>" /></li>
 			</ul>

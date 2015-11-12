@@ -5,7 +5,7 @@ Plugin Name: SimpleReach Analytics
 Plugin URI: https://github.com/simplereach/sranalytics_wordpress
 Requires at least: 3.0
 Tested up to: 4.3.1
-Stable tag: 0.1.5
+Stable tag: 0.1.6
 
 SimpleReach Analytics finds trending articles and gives publishers deep insights into their social traffic.
 
@@ -15,6 +15,9 @@ SimpleReach Analytics finds trending articles and gives publishers deep insights
 3. Go to _Settings -> SimpleReach Analytics_ and enter your PID into the first field. Click _Save_.
 
 == Changelog ==
+
+= 0.1.6 =
+* Add the ability to set scroll depth to manual for infinite scroll sites 
 
 = 0.1.5 =
 * Remove deprecated author function and iframe feature

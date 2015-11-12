@@ -45,6 +45,7 @@ function sranalytics_insert_js() {
 	$sranalytics_show_on_attachment_pages = get_option( 'sranalytics_show_on_attachment_pages' );
 	$sranalytics_show_everywhere = get_option( 'sranalytics_show_everywhere' );
 	$sranalytics_force_http = get_option( 'sranalytics_force_http' );
+	$sranalytics_manual_scroll_depth = get_option( 'sranalytics_manual_scroll_depth' );
 
 	// Try and check the validity of the PID
 	if ( empty( $sranalytics_pid) || 24 != strlen( $sranalytics_pid ) ) {
@@ -167,6 +168,9 @@ function sranalytics_insert_js() {
 		'authors' => array_map( 'esc_js', apply_filters( 'sranalytics_authors', $authors ) ),
 	);
 
+  if ($sranalytics_manual_scroll_depth) {
+    $javascript_array['manual_scroll_depth'] = true;
+  }
 	// Get the JS ready to go
 	if ($sranalytics_show_beacon) {
 		wp_register_script( 'sranalytics', plugins_url( 'javascripts/sranalytics.js', __FILE__) );
